@@ -11,7 +11,7 @@
 // Feel free to add more tags
 // -------------------------------------------------------------------
 mySettings = {
-    previewParserPath: '',
+    previewParserPath: '~/sets/markdown/preview.php',
     onShiftEnter: {keepDefault: false, openWith: '\n\n'},
     markupSet: [
         {
