@@ -34,7 +34,7 @@
         </p>
       </div>
 
-      <form class="form-horizontal">
+      <form class="form-horizontal" method="post" enctype="multipart/form-data">
         
         <div class="form-group">
           <label for="domain" class="col-sm-2 control-label">漏洞域名</label>
