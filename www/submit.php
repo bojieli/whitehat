@@ -44,16 +44,16 @@
         </div>
 
         <div class="form-group">
-          <label for="rank" class="col-sm-2 control-label">自评Rank</label>
-          <div class="col-sm-3">
-            <input type="text" class="form-control" id="rank" placeholder="1-20">
+          <label for="title" class="col-sm-2 control-label">漏洞标题</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" id="title" placeholder="">
           </div>
         </div>
 
         <div class="form-group">
-          <label for="title" class="col-sm-2 control-label">漏洞标题</label>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" id="title" placeholder="">
+          <label for="rank" class="col-sm-2 control-label">自评Rank</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" id="rank" placeholder="1-20">
           </div>
         </div>
 
@@ -75,6 +75,13 @@
           <label for="fix_method" class="col-sm-2 control-label">漏洞修复</label>
           <div class="col-sm-9">
             <textarea type="text" class="form-control" rows="5" id="fix_method" placeholder="建议的漏洞修复方案"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">上传附件</label>
+          <div class="col-sm-5">
+            <input type="file" name="attachment"/>
           </div>
         </div>
 
