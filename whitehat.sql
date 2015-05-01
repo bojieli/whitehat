@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.4
+-- version 4.4.2
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2015-04-29 13:49:13
--- 服务器版本： 10.0.17-MariaDB-log
--- PHP Version: 5.6.8
+-- Generation Time: 2015-05-01 19:14:07
+-- 服务器版本： 5.6.24-0ubuntu2
+-- PHP Version: 5.6.4-4ubuntu6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `whitehat`
 --
-CREATE DATABASE IF NOT EXISTS `whitehat` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
-USE `whitehat`;
 
 -- --------------------------------------------------------
 
@@ -28,7 +26,6 @@ USE `whitehat`;
 -- 表的结构 `Loophole`
 --
 
-DROP TABLE IF EXISTS `Loophole`;
 CREATE TABLE IF NOT EXISTS `Loophole` (
   `id` int(11) NOT NULL,
   `username` varchar(10) COLLATE utf8_bin NOT NULL,
@@ -38,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `Loophole` (
   `phone` varchar(20) COLLATE utf8_bin NOT NULL,
   `qq` varchar(10) COLLATE utf8_bin NOT NULL,
   `email` varchar(15) COLLATE utf8_bin NOT NULL,
-  `submit_time` int(11) NOT NULL DEFAULT '0',
+  `submit_time` datetime NOT NULL,
   `domain` varchar(300) COLLATE utf8_bin NOT NULL,
   `title` varchar(300) COLLATE utf8_bin NOT NULL,
   `abstract` text COLLATE utf8_bin NOT NULL,
@@ -46,19 +43,22 @@ CREATE TABLE IF NOT EXISTS `Loophole` (
   `detail` text COLLATE utf8_bin NOT NULL,
   `type` text COLLATE utf8_bin NOT NULL,
   `fix_method` text COLLATE utf8_bin,
-  `fixed_time` int(11) NOT NULL DEFAULT '0',
+  `fixed_time` text COLLATE utf8_bin NOT NULL,
   `fixed` tinyint(1) NOT NULL DEFAULT '0',
   `score` int(11) NOT NULL DEFAULT '0',
   `token` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `official_reply` text COLLATE utf8_bin,
   `note` text COLLATE utf8_bin
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- 插入之前先把表清空（truncate） `Loophole`
+-- 转存表中的数据 `Loophole`
 --
 
-TRUNCATE TABLE `Loophole`;
+INSERT INTO `Loophole` (`id`, `username`, `studentnumber`, `anonymous`, `gender`, `phone`, `qq`, `email`, `submit_time`, `domain`, `title`, `abstract`, `rank`, `detail`, `type`, `fix_method`, `fixed_time`, `fixed`, `score`, `token`, `official_reply`, `note`) VALUES
+(3, 'a', '', 0, 3, 'a', '', '', '0000-00-00 00:00:00', 'a', 'a', 'a', 0, 'a', '', 'a', '0', 0, 0, NULL, NULL, NULL),
+(4, 'a', '', 0, 3, 'a', '', '', '2015-05-01 18:57:17', 'a', 'a', 'a', 0, 'a', '', 'a', '0', 0, 0, NULL, NULL, NULL);
+
 --
 -- Indexes for dumped tables
 --
@@ -77,7 +77,7 @@ ALTER TABLE `Loophole`
 -- AUTO_INCREMENT for table `Loophole`
 --
 ALTER TABLE `Loophole`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

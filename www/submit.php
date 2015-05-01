@@ -4,63 +4,61 @@ $right = true;
 $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["button"]) && ($_POST["button"] == "create")) {
-        if (!isset($_POST["domain"]) && ($_POST["domain"] != "")) {
+        if (!(isset($_POST["domain"]) && ($_POST["domain"] != ""))) {
             $right = false;
-            $error = $error . "\n 请输入域名！";
+            $error = $error . "请输入域名！<br>";
         }
-        if (!isset($_POST["title"]) && ($_POST["title"] != "")) {
+        if (!(isset($_POST["title"]) && ($_POST["title"] != ""))) {
             $right = false;
-            $error = $error . "\n 请输入标题！";
+            $error = $error . "请输入标题！<br>";
         }
-        if (!isset($_POST["rank"]) && ($_POST["rank"] != "")) {
+        if (!(isset($_POST["rank"]) && ($_POST["rank"] != ""))) {
             $right = false;
-            $error = $error . "\n 请输入自评rank！";
+            $error = $error . "请输入自评rank！<br>";
         }
-        if (!isset($_POST["abstract"]) && ($_POST["abstract"] != "")) {
+        if (!(isset($_POST["abstract"]) && ($_POST["abstract"] != ""))) {
             $right = false;
-            $error = $error . "\n 请输入问题描述！";
+            $error = $error . "请输入问题描述！<br>";
         }
-        if (!isset($_POST["detail"]) && ($_POST["detail"] != "")) {
+        if (!(isset($_POST["detail"]) && ($_POST["detail"] != ""))) {
             $right = false;
-            $error = $error . "\n 请输入详细说明！";
+            $error = $error . "请输入详细说明！<br>";
         }
-        if (!isset($_POST["fix_method"]) && ($_POST["fix_method"] != "")) {
+        if (!(isset($_POST["fix_method"]) && ($_POST["fix_method"] != ""))) {
             $right = false;
-            $error = $error . "\n 请输入漏洞修复方法！";
+            $error = $error . "请输入漏洞修复方法！<br>";
         }
-        if (!isset($_POST["username"]) && ($_POST["username"] != "")) {
+        if (!(isset($_POST["username"]) && ($_POST["username"] != ""))) {
             $right = false;
-            $error = $error . "\n 请输入您的姓名！";
+            $error = $error . "请输入您的姓名！<br>";
         }
-        if (!isset($_POST["gender"]) && ($_POST["gender"] != "")) {
+        if (!(isset($_POST["gender"]) && ($_POST["gender"] != ""))) {
             $right = false;
-            $error = $error . "\n 请输入性别！";
+            $error = $error . "请输入性别！<br>";
         }
-        if (!isset($_POST["email"]) && ($_POST["email"] != "")) {
+        if (!(isset($_POST["email"]) && ($_POST["email"] != ""))) {
             $right = false;
-            $error = $error . "\n 请输入邮箱！";
+            $error = $error . "请输入邮箱！<br>";
         }
-        if (!isset($_POST["phone"]) && ($_POST["phone"] != "")) {
+        if (!(isset($_POST["phone"]) && ($_POST["phone"] != ""))) {
             $right = false;
-            $error = $error . "\n 请输入电话！";
-        }
-        if (!isset($_POST["anonymous"]) && ($_POST["anonymous"] != "")) {
-            $right = false;
-            $error = $error . "\n 请选择是否匿名！";
+            $error = $error . "请输入电话！<br>";
         }
         if ($right) {
             try {
-                $query = $con->prepare("INSERT INTO Loophole (username,studentnumber,annoymous,gender,
-                    phone,qq,email,submit_time,domain,title,abstract,rank,detail,type)
-VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-                $query->execute($_POST["username"], $_POST["studentnumber"], $_POST["annoymous"],
-                    $_POST["gender"], $_POST["phone"], $_POST["qq"], $_POST["email"], time(), $_POST["domain"],
-                    $_POST["title"], $_POST["abstract"], $_POST["rank"], $_POST["detail"], $_POST["type"]);
+                $query = $con->prepare("INSERT INTO Loophole (domain,title,rank,abstract,detail,fix_method,username,gender,phone,anonymous,submit_time)VALUES(?,?,?,?,?,?,?,?,?,?,NOW())");
+                $query->execute(array($_POST["domain"], $_POST["title"], $_POST["rank"],
+                    $_POST["abstract"], $_POST["detail"], $_POST["fix_method"], $_POST["username"],$_POST["gender"],
+                    $_POST["phone"], isset($_POST["anonymous"])));
             } catch (PDOException $e) {
                 echo "cannot Insert!: " . $e->getMessage();
                 exit();
             }
+            echo "已提交";
+        } else {
+          echo $error;
         }
+        exit();
     }
 }
 ?>
@@ -112,7 +110,7 @@ VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         <div class="form-group">
           <label for="title" class="col-sm-2 control-label">漏洞标题</label>
           <div class="col-sm-9">
-              <input type="text" class="form-control" id="title" name="tittle" placeholder="">
+              <input type="text" class="form-control" id="title" name="title" placeholder="">
           </div>
         </div>
 
@@ -163,7 +161,7 @@ VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
         <div class="form-group">
           <label for="gender" class="col-sm-2 control-label">性别</label>
-          <div class="col-sm-1">
+          <div class="col-sm-3">
               <select class="form-control" id="gender" name="gender">
              <option value="1">男</option>
              <option value="2">女</option>
@@ -197,7 +195,7 @@ VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
           <div class="col-sm-offset-2 col-sm-4">
             <div class="checkbox">
               <label>
-                  <input type="checkbox" id="anonymous" name="anonymous"> 匿名
+                  <input type="checkbox" id="anonymous" name="anonymous" value="anonymous"> 匿名
               </label>
             </div>
           </div>
@@ -233,7 +231,7 @@ VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
   <script src="js/bootstrap.min.js"></script>
   <script>
       $(document).ready(function () {
-          $('#打开网页后光标首先定位到的输入框').focus();
+          $('#domain').focus();
           //$('#inputBBB').markItUp(mySettings);
       });
 
