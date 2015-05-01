@@ -47,9 +47,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($right) {
             try {
                 $query = $con->prepare("INSERT INTO Loophole (domain,title,rank,abstract,detail,fix_method,username,gender,email,phone,anonymous,submit_time)VALUES(?,?,?,?,?,?,?,?,?,?,?,NOW())");
-                $query->execute(array($_POST["domain"], $_POST["title"], $_POST["rank"],
-                    $_POST["abstract"], $_POST["detail"], $_POST["fix_method"], $_POST["username"],$_POST["gender"],$_POST["email"],
-                    $_POST["phone"], isset($_POST["anonymous"])));
+                $query->execute(array(
+                  htmlspecialchars($_POST["domain"]),
+                  htmlspecialchars($_POST["title"]),
+                  htmlspecialchars($_POST["rank"]),
+                  htmlspecialchars($_POST["abstract"]),
+                  htmlspecialchars($_POST["detail"]),
+                  htmlspecialchars($_POST["fix_method"]),
+                  htmlspecialchars($_POST["username"]),
+                  htmlspecialchars($_POST["gender"]),
+                  htmlspecialchars($_POST["email"]),
+                  htmlspecialchars($_POST["phone"]),
+                  isset($_POST["anonymous"])));
             } catch (PDOException $e) {
                 echo "cannot Insert!: " . $e->getMessage();
                 exit();
