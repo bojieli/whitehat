@@ -46,9 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         if ($right) {
             try {
-                $query = $con->prepare("INSERT INTO Loophole (domain,title,rank,abstract,detail,fix_method,username,gender,phone,anonymous,submit_time)VALUES(?,?,?,?,?,?,?,?,?,?,NOW())");
+                $query = $con->prepare("INSERT INTO Loophole (domain,title,rank,abstract,detail,fix_method,username,gender,email,phone,anonymous,submit_time)VALUES(?,?,?,?,?,?,?,?,?,?,?,NOW())");
                 $query->execute(array($_POST["domain"], $_POST["title"], $_POST["rank"],
-                    $_POST["abstract"], $_POST["detail"], $_POST["fix_method"], $_POST["username"],$_POST["gender"],
+                    $_POST["abstract"], $_POST["detail"], $_POST["fix_method"], $_POST["username"],$_POST["gender"],$_POST["email"],
                     $_POST["phone"], isset($_POST["anonymous"])));
             } catch (PDOException $e) {
                 echo "cannot Insert!: " . $e->getMessage();
@@ -205,7 +205,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div class="col-sm-offset-2 col-sm-4">
             <div class="checkbox">
               <label>
-                  <input type="checkbox" name="agree"> 我已阅读并同意<a href="/">XXX</a>
+                  <input type="checkbox" id="agree" name="agree"> 我已阅读并同意<a href="/">XXX</a>
               </label>
             </div>
           </div>
@@ -213,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-2">
-              <button type="submit" name="button" class="btn btn-default" value="create">提交</button>
+              <button id="submit" type="submit" name="button" class="btn btn-default" value="create">提交</button>
           </div>
         </div>
 
@@ -224,6 +224,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <span class="text-muted">Copyright &copy; 白帽子大赛 2015</span>
       </div>
     <div>
+
+    <!-- 错误提示模态框 -->
+    <div class="modal fade" id="modal-error" tabindex="-1" role="dialog" aria-labelledby="modal-error-label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              &times;
+            </button>
+            <h4 class="modal-title" id="modal-error-label">
+              您填写的信息有误
+            </h4>
+          </div>
+          <div class="modal-body" id="error-message">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+              data-dismiss="modal">确定
+            </button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.modal -->
+
   </body>
   <!-- Bootstrap core JavaScript -->
   <!-- Placed at the end of the document so the pages load faster -->
@@ -235,5 +259,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           //$('#inputBBB').markItUp(mySettings);
       });
 
+      //前端验证表单
+
+      $("#submit").on('click',function(event){
+        var err=0,msg="";
+        if($("#domain").val().length<=12||$("#domain").val().substr(-12,12)!=".ustc.edu.cn"){
+          err=1;
+          msg+="请输入以.ustc.edu.cn结尾的域名！<br>";
+        }
+        if($("#title").val()==""){
+          err=1;
+          msg+="标题不能为空！<br>";
+        }
+        if($("#rank").val()==""||isNaN($("#rank").val())||$("#rank").val()<1||$("#rank").val()>20){
+          err=1;
+          msg+="自评Rank需要为1-20的整数！<br>";
+        }
+        if($("#abstract").val()==""){
+          err=1;
+          msg+="问题描述不能为空！<br>";
+        }
+        if($("#detail").val()==""){
+          err=1;
+          msg+="详细说明不能为空！<br>";
+        }
+        if($("#fix_method").val()==""){
+          err=1;
+          msg+="漏洞修复不能为空！<br>";
+        }
+        if($("#username").val()==""){
+          err=1;
+          msg+="姓名不能为空！<br>";
+        }
+        if($("#email").val().length<=17||$("#email").val().substr(-17,17)!="@mail.ustc.edu.cn"){
+          err=1;
+          msg+="邮箱必须以@mail.ustc.edu.cn结尾！<br>";
+        }
+        if($("#phone").val().length!=11||isNaN($("#phone").val())){
+          err=1;
+          msg+="手机必须为11位数字！<br>";
+        }
+        if(!($("#agree")[0].checked)){
+          err=1;
+          msg+="提交前需勾选同意比赛条款！<br>";
+        }
+        if(err==1){
+          $("#error-message").html(msg);
+          $("#modal-error").modal('show');
+          return false;
+        }
+      });
   </script>
 </html>
