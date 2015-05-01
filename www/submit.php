@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "cannot Insert!: " . $e->getMessage();
                 exit();
             }
-            echo "已提交";
+            echo '<script>alert("提交成功！");</script><meta http-equiv="refresh" content="0;url=/">';
         } else {
           echo $error;
         }
