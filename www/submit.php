@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "cannot Insert!: " . $e->getMessage();
                 exit();
             }
-            echo '<script>alert("提交成功！");</script><meta http-equiv="refresh" content="0;url=/">';
+            echo '<meta charset="utf-8"><script>alert("提交成功！");</script><meta http-equiv="refresh" content="0;url=/">';
         } else {
           echo $error;
         }
