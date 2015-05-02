@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="/favicon.ico">
 
-    <title>白帽子大赛 | 提交漏洞</title>
+    <title>白帽子安全技术挑战赛 | 提交漏洞</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet"/>
@@ -258,7 +258,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <div>
       <div class="container">
-        <span class="text-muted">Copyright &copy; 白帽子大赛 2015</span>
+        <span class="text-muted">Copyright &copy; 校园白帽子安全技术挑战赛 2015</span>
       </div>
     </div>
 

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="/favicon.ico">
 
-    <title>白帽子大赛</title>
+    <title>白帽子安全技术挑战赛</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet"/>
@@ -27,7 +27,7 @@
       </div>
 
       <div class="jumbotron">
-        <h1>欢迎参加白帽子大赛</h1>
+        <h1>欢迎参加校园白帽子安全技术挑战赛</h1>
         <p class="lead">这里说些什么的</p>
         <p><a class="btn btn-lg btn-success" href="submit.php" role="button">提交漏洞</a></p>
       </div>
@@ -67,7 +67,7 @@
 
       <div>
 	      <div class="container">
-	        <span class="text-muted">Copyright &copy; 白帽子大赛 2015</span>
+	        <span class="text-muted">Copyright &copy; 校园白帽子安全技术挑战赛 2015</span>
 	      </div>
     	</div>
 
