@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $right = false;
             $error = $error . "请输入电话！<br>";
         }
-        if (!(isset($_POST["captcha"]) && ($_POST["captcha"] == $_SESSION["code"]))) {
+        if (!(isset($_POST["captcha"]) && isset($_SESSION["code"]) && ($_POST["captcha"] == $_SESSION["code"]))) {
             $right = false;
             $error = $error . "验证码有误！<br>";
         }
