@@ -1,3 +1,4 @@
+<?php require_once("header.php"); ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
@@ -42,31 +43,21 @@
 			      </tr>
 			   	</thead>
 			   	<tbody>
-			      <tr>
-			        <td>2015-05-02</td>
-			        <td>新浪微博android客户端本地提权</td>
-			        <td>张三</td>
-			      </tr>
-			      <tr>
-			        <td>2015-05-01</td>
-			        <td>12306网络设备多处弱口令</td>
-			        <td>李博杰</td>
-			      </tr>
-			      <tr>
-			        <td>2015-04-30</td>
-			        <td>爱奇艺旗下某站存储型xss（可打大量用户cookies）</td>
-			        <td><i>匿名</i></td>
-			      </tr>
-			      <tr>
-			        <td>2015-04-29</td>
-			        <td>YY浏览器设计缺陷导致存在本地文件读取/特殊命令执行</td>
-			        <td><i>匿名</i></td>
-			      </tr>
-			      <tr>
-			        <td>2015-04-28</td>
-			        <td>中国移动10086.cn某站点存在命令执行漏洞</td>
-			        <td>崔颢</td>
-			      </tr>
+<?php
+	$r=$con->query("select submit_time,title,username,anonymous from Loophole order by submit_time desc limit 0,5");
+	while($row=$r->fetch()) {
+		echo '<tr>';
+		echo '<td>'.$row['submit_time'].'</td>';
+		echo '<td>'.$row['title'].'</td>';
+		if($row['anonymous']){
+			$name="<i>匿名</i>";
+		}else{
+			$name=$row['username'];
+		}
+		echo '<td>'.$name.'</td>';
+		echo '</tr>';
+	}
+?>
 			  	</tbody>
 				</table>
       </div>
