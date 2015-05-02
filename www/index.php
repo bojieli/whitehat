@@ -45,6 +45,9 @@
 			   	<tbody>
 <?php
 	$r=$con->query("select submit_time,title,username,anonymous from Loophole order by submit_time desc limit 0,5");
+  if($r->rowcount()==0){
+    echo '<tr><td colspan="3">暂无数据</td></tr>';
+  }
 	while($row=$r->fetch()) {
 		echo '<tr>';
 		echo '<td>'.$row['submit_time'].'</td>';

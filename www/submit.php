@@ -213,20 +213,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-4">
+          <div class="col-sm-offset-2 col-sm-6">
             <div class="checkbox">
               <label>
                   <input type="checkbox" id="anonymous" name="anonymous" value="anonymous"> 匿名
               </label>
             </div>
+            <p class="help-block">匿名与否决定了您的姓名是否展示在首页，不影响最终评奖</p>
           </div>
         </div>
 
         <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-4">
+          <div class="col-sm-offset-2 col-sm-6">
             <div class="checkbox">
               <label>
-                  <input type="checkbox" id="agree" name="agree"> 我已阅读并同意<a href="/">XXX</a>
+                  <input type="checkbox" id="agree" name="agree"> 我已阅读并同意<a href="/">比赛规则</a>
               </label>
             </div>
           </div>
