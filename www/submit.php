@@ -1,5 +1,6 @@
 <?php
 require_once("header.php");
+require_once("sendmail.php");
 session_start();
 session_destroy();
 $right = true;
@@ -69,6 +70,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "cannot Insert!: " . $e->getMessage();
                 exit();
             }
+            sendmail("[漏洞]".htmlspecialchars($_POST["title"]),
+              "<b>域名:</b>".htmlspecialchars($_POST["domain"])."<br><br>".
+              "<b>标题:</b>".htmlspecialchars($_POST["title"])."<br><br>".
+              "<b>自评Rank:</b>".htmlspecialchars($_POST["rank"])."<br><br>".
+              "<b>问题描述:</b>".htmlspecialchars($_POST["abstract"])."<br><br>".
+              "<b>详细说明:</b>".htmlspecialchars($_POST["detail"])."<br><br>".
+              "<b>修复方法:</b>".htmlspecialchars($_POST["fix_method"])."<br><br>".
+              "<b>姓名:</b>".htmlspecialchars($_POST["username"])."<br><br>".
+              "<b>性别:</b>".($_POST["gender"]=="1"?"男":$_POST["gender"]=="2"?"女":"保密")."<br><br>".
+              "<b>邮箱:</b>".htmlspecialchars($_POST["email"])."<br><br>".
+              "<b>手机:</b>".htmlspecialchars($_POST["phone"])."<br><br>".
+              "<b>匿名:</b>".(isset($_POST["anonymous"])?"是":"否")
+              );
             echo '<meta charset="utf-8"><script>alert("提交成功！");</script><meta http-equiv="refresh" content="0;url=/">';
         } else {
           echo $error;
