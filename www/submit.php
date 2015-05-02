@@ -1,5 +1,7 @@
 <?php
 require_once("header.php");
+session_start();
+session_destroy();
 $right = true;
 $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -43,6 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!(isset($_POST["phone"]) && ($_POST["phone"] != ""))) {
             $right = false;
             $error = $error . "请输入电话！<br>";
+        }
+        if (!(isset($_POST["captcha"]) && ($_POST["captcha"] == $_SESSION["code"]))) {
+            $right = false;
+            $error = $error . "验证码有误！<br>";
         }
         if ($right) {
             try {
@@ -194,9 +200,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-4">
+            <img id="captcha-pic" title="点击刷新" src="captcha/captcha.php" onclick="this.src='captcha/captcha.php?'+Math.random();captcha_ok=0;"></img>
+          </div>
+        </div>
+
+        <div class="form-group" id="captcha-form">
           <label for="captcha" class="col-sm-2 control-label">验证码</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="captcha" name="captcha" placeholder="">
+              <input type="text" class="form-control" id="captcha" name="captcha" placeholder="" onblur="check_captcha();">
           </div>
         </div>
 
@@ -312,11 +324,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           err=1;
           msg+="提交前需勾选同意比赛条款！<br>";
         }
+        if(!captcha_ok){
+          err=1;
+          msg+="验证码有误！<br>";
+        }
+
         if(err==1){
           $("#error-message").html(msg);
           $("#modal-error").modal('show');
           return false;
         }
       });
+
+      //ajax验证码
+      var captcha_ok=0;
+      function check_captcha(){
+        $.post("captcha/check.php",{captcha:$("#captcha").val()},function(data,status){
+          if(status=="success"){
+            if(data=="0"){//验证码错误
+              $("#captcha-form").addClass("has-error");
+              $("#captcha-pic")[0].src='captcha/captcha.php?'+Math.random();
+              captcha_ok=0;
+            }else{//正确
+              $("#captcha-form").removeClass("has-error");
+              captcha_ok=1;
+            }
+          }
+        });
+      }
   </script>
 </html>
