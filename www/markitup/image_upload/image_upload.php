@@ -1,7 +1,7 @@
 <?php
 /* Customise the paths here: */
 
-$file_path = '/home/ctyi/project/lug-bmz/whitehat/www/user_upload';  // full filesystem path
+$file_path = dirname(__FILE__).'/../../user_upload';  // full filesystem path
 $web_path = '/user_upload';                // path from root of website
 
 
