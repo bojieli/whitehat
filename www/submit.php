@@ -148,9 +148,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="rank" class="col-sm-2 control-label">自评Rank</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="rank" name="rank" placeholder="1-20">
+              <input type="text" class="form-control" id="rank" name="rank" placeholder="1-20，危害越高，Rank越大">
           </div>
-          <p class="help-block">漏洞危害等级越高，Rank数值越大</p>
         </div>
 
         <div class="form-group">
@@ -164,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="detail" class="col-sm-2 control-label">详细说明</label>
           <div class="col-sm-9">
-              <textarea type="text" class="form-control" rows="5" id="detail" name="detail"
+              <textarea type="text" class="form-control" rows="10" id="detail" name="detail"
                         placeholder="对漏洞的详细描述，请尽量多的深入细节以方便对漏洞的理解"></textarea>
           </div>
         </div>
@@ -172,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="fix_method" class="col-sm-2 control-label">漏洞修复</label>
           <div class="col-sm-9">
-              <textarea type="text" class="form-control" rows="5" id="fix_method" name="fix_method"
+              <textarea type="text" class="form-control" rows="10" id="fix_method" name="fix_method"
                         placeholder="建议的漏洞修复方案"></textarea>
           </div>
         </div>
