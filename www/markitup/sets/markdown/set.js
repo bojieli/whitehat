@@ -39,7 +39,12 @@ mySettings = {
         }
         },
         {separator: '---------------'},
-        {name: 'Picture', key: 'P', replaceWith: '![[![Alternative text]!]]([![Url:!:http://]!] "[![Title]!]")'},
+        {
+            name: 'Picture', className: 'image-upload', closeWith: function (markItUp) {
+            miu.ImageUpload.upload(markItUp, 'markdown');
+        }
+        },
+        /* {name: 'Picture', key: 'P', replaceWith: '![[![Alternative text]!]]([![Url:!:http://]!] "[![Title]!]")'},*/
         {
             name: 'Link',
             key: 'L',

@@ -1664,5 +1664,4 @@ negligence or otherwise) arising in any way out of the use of this
 software, even if advised of the possibility of such damage.
 */
 ?>
-Status API Training Shop Blog About
-© 2015 GitHub, Inc. Terms Privacy Security Contact
+

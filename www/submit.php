@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="css/style.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="markitup/skins/markitup/style.css"/>
     <link rel="stylesheet" type="text/css" href="markitup/sets/markdown/style.css">
-    
+      <link rel="stylesheet" type="text/css" href="markitup/image_upload/image_upload.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -115,6 +115,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="js/jquery-2.1.3.min.js"></script>
     <script src="markitup/jquery.markitup.js"></script>
     <script type="text/javascript" src="markitup/sets/markdown/set.js"></script>
+      <script type="text/javascript" src="js/jquery.form.min.js"></script>
+      <script type="text/javascript" src="markitup/image_upload/image_upload.js"></script>
   </head>
 
   <body>
@@ -293,7 +295,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <script>
       $(document).ready(function () {
           $('#domain').focus();
-          //$('#inputBBB').markItUp(mySettings);
+          $('#detail').markItUp(mySettings);
+          $('#fix_method').markItUp(mySettings);
       });
 
       //前端验证表单
