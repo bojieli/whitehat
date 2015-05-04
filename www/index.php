@@ -28,8 +28,11 @@
 
       <div class="jumbotron">
         <h1>欢迎参加校园白帽子安全技术挑战赛</h1>
-        <p class="lead">这里说些什么的</p>
-        <p><a class="btn btn-lg btn-success" href="submit.php" role="button">提交漏洞</a></p>
+        <p class="lead">5月10日~5月30日，寻找校园网络的安全漏洞，丰厚奖品等你拿！</p>
+        <p>
+          <a class="btn btn-lg btn-primary" href="rule.php" role="button">比赛规则</a>
+          <a class="btn btn-lg btn-success" href="submit.php" role="button">提交漏洞</a>
+        </p>
       </div>
 
       <div>
@@ -65,11 +68,7 @@
 				</table>
       </div>
 
-      <div>
-	      <div class="container">
-	        <span class="text-muted">Copyright &copy; 校园白帽子安全技术挑战赛 2015</span>
-	      </div>
-    	</div>
+      <?php require("footer.php");?>
 
     </div>
 

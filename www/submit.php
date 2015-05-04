@@ -243,7 +243,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div class="col-sm-offset-2 col-sm-6">
             <div class="checkbox">
               <label>
-                  <input type="checkbox" id="agree" name="agree"> 我已阅读并同意<a href="/">比赛规则</a>
+                  <input type="checkbox" id="agree" name="agree"> 我已阅读并同意<a href="rule.php">比赛规则</a>
               </label>
             </div>
           </div>
@@ -257,11 +257,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       </form>
     </div>
-    <div>
-      <div class="container">
-        <span class="text-muted">Copyright &copy; 校园白帽子安全技术挑战赛 2015</span>
-      </div>
-    </div>
+    <?php require("footer.php");?>
 
     <!-- 错误提示模态框 -->
     <div class="modal fade" id="modal-error" tabindex="-1" role="dialog" aria-labelledby="modal-error-label" aria-hidden="true">
