@@ -117,16 +117,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script type="text/javascript" src="markitup/sets/markdown/set.js"></script>
       <script type="text/javascript" src="js/jquery.form.min.js"></script>
       <script type="text/javascript" src="markitup/image_upload/image_upload.js"></script>
+    <style>
+      .tips {
+          margin: 20px 0;
+          padding: 15px;
+          border: 1px #ddd dashed;
+          border-radius: 8px;
+          font-size: 16px;
+          color: #999;
+      }
+    </style>
   </head>
 
   <body>
     <div class="container">
       <h3>提交漏洞</h3>
       <hr>
-      <div>
-        <p>
-          一些说明
-        </p>
+      <div class="tips">
+        <p>提交的漏洞将于24小时内被人工审核、评定 rank，审核通过的漏洞将展示在漏洞提交平台首页。重复提交的漏洞将不会被审核通过。</p>
+        <p>请准确填写身份信息和联系方式。由于身份信息、联系方式填写错误导致的问题，组委会不承担责任。</p>
       </div>
 
         <form class="form-horizontal" method="post">
