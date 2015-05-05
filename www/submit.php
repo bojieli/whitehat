@@ -7,21 +7,29 @@ $right = true;
 $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["button"]) && ($_POST["button"] == "create")) {
-        if (!(isset($_POST["domain"]) && ($_POST["domain"] != ""))) {
+        if (!(isset($_POST["type"]))) {
             $right = false;
-            $error = $error . "请输入域名！<br>";
+            $error = $error . "请输入漏洞类型！<br>";
+        } else {
+            $type = intval($_POST["type"]);
+            switch ($type) {
+            case 1:
+                $domain = $_POST["domain"];
+                break;
+            case 2:
+                $domain = $_POST["device"];
+                break;
+            case 3:
+                $domain = $_POST["app"];
+                break;
+            default:
+                $right = false;
+                $error = $error . "未知漏洞类型！<br>";
+            }
         }
         if (!(isset($_POST["title"]) && ($_POST["title"] != ""))) {
             $right = false;
-            $error = $error . "请输入标题！<br>";
-        }
-        if (!(isset($_POST["rank"]) && ($_POST["rank"] != ""))) {
-            $right = false;
-            $error = $error . "请输入自评rank！<br>";
-        }
-        if (!(isset($_POST["abstract"]) && ($_POST["abstract"] != ""))) {
-            $right = false;
-            $error = $error . "请输入问题描述！<br>";
+            $error = $error . "请输入漏洞标题！<br>";
         }
         if (!(isset($_POST["detail"]) && ($_POST["detail"] != ""))) {
             $right = false;
@@ -39,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $right = false;
             $error = $error . "请输入性别！<br>";
         }
-        if (!(isset($_POST["email"]) && ($_POST["email"] != ""))) {
+        if (!(isset($_POST["email"]) && ($_POST["email"] != "") && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL))) {
             $right = false;
             $error = $error . "请输入邮箱！<br>";
         }
@@ -51,14 +59,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $right = false;
             $error = $error . "验证码有误！<br>";
         }
+
+        if (!is_numeric($_POST['vector-score']) || $_POST['vector-score'] <= 0 || $_POST['vector-score'] > 10) {
+            $right = false;
+            $error = $error . "危害分数有误！<br>";
+        }
+        $vector_score = $_POST['vector-score'];
+        $target_rank = intval($_POST["target-rank"]);
+        if ($target_rank == 0 || $target_rank < 100 || $target_rank > 500) {
+            $right = false;
+            $error = $error . "靶标价值有误！<br>";
+        }
+
         if ($right) {
+            $total_score = intval($vector_score * $target_rank);
             try {
-                $query = $con->prepare("INSERT INTO Loophole (domain,title,rank,abstract,detail,fix_method,username,gender,email,phone,anonymous,submit_time)VALUES(?,?,?,?,?,?,?,?,?,?,?,NOW())");
+                $query = $con->prepare("INSERT INTO Loophole (domain_type,domain,vector,target_rank,score,title,detail,fix_method,username,gender,email,phone,anonymous,submit_time)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())");
                 $query->execute(array(
-                  htmlspecialchars($_POST["domain"]),
+                  htmlspecialchars($_POST["type"]),
+                  htmlspecialchars($domain),
+                  htmlspecialchars($_POST["vector"]),
+                  intval($_POST["target-rank"]),
+                  $total_score,
                   htmlspecialchars($_POST["title"]),
-                  htmlspecialchars($_POST["rank"]),
-                  htmlspecialchars($_POST["abstract"]),
                   htmlspecialchars($_POST["detail"]),
                   htmlspecialchars($_POST["fix_method"]),
                   htmlspecialchars($_POST["username"]),
@@ -67,23 +90,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   htmlspecialchars($_POST["phone"]),
                   isset($_POST["anonymous"])));
             } catch (PDOException $e) {
-                echo "cannot Insert!: " . $e->getMessage();
+                echo "Database Error: cannot Insert!: " . $e->getMessage();
                 exit();
             }
-            sendmail("[漏洞]".htmlspecialchars($_POST["title"]),
-              "<b>域名:</b>".htmlspecialchars($_POST["domain"])."<br><br>".
-              "<b>标题:</b>".htmlspecialchars($_POST["title"])."<br><br>".
-              "<b>自评Rank:</b>".htmlspecialchars($_POST["rank"])."<br><br>".
-              "<b>问题描述:</b>".htmlspecialchars($_POST["abstract"])."<br><br>".
-              "<b>详细说明:</b>".htmlspecialchars($_POST["detail"])."<br><br>".
-              "<b>修复方法:</b>".htmlspecialchars($_POST["fix_method"])."<br><br>".
-              "<b>姓名:</b>".htmlspecialchars($_POST["username"])."<br><br>".
-              "<b>性别:</b>".($_POST["gender"]=="1"?"男":$_POST["gender"]=="2"?"女":"保密")."<br><br>".
-              "<b>邮箱:</b>".htmlspecialchars($_POST["email"])."<br><br>".
-              "<b>手机:</b>".htmlspecialchars($_POST["phone"])."<br><br>".
-              "<b>匿名:</b>".(isset($_POST["anonymous"])?"是":"否")
+            sendmail($_POST['email'], $_POST['username'],
+              "[漏洞] ".htmlspecialchars($_POST["title"]),
+
+              "<b>靶标:</b> ".htmlspecialchars($_POST["domain"])." ($target_rank 分)<br><br>".
+              "<b>标题:</b> ".htmlspecialchars($_POST["title"])."<br><br>".
+              "<b>危害向量:</b> ".htmlspecialchars($_POST["vector"])."<br><br>".
+              "<b>得分: $total_score</b> = $target_rank * $vector_score<br><br>".
+              "<b>详细说明:</b> ".htmlspecialchars($_POST["detail"])."<br><br>".
+              "<b>修复方法:</b> ".htmlspecialchars($_POST["fix_method"])."<br><br>".
+              "<b>姓名:</b> ".htmlspecialchars($_POST["username"])."<br><br>".
+              "<b>性别:</b> ".($_POST["gender"]=="1"?"男":($_POST["gender"]=="2"?"女":"保密"))."<br><br>".
+              "<b>邮箱:</b> ".htmlspecialchars($_POST["email"])."<br><br>".
+              "<b>手机:</b> ".htmlspecialchars($_POST["phone"])."<br><br>".
+              "<b>匿名:</b> ".(isset($_POST["anonymous"])?"是":"否")
               );
-            echo '<meta charset="utf-8"><script>alert("提交成功！");</script><meta http-equiv="refresh" content="0;url=/">';
+            echo '<meta charset="utf-8"><script>alert("提交成功！请查收邮件，审核结果我们将邮件通知。");</script><meta http-equiv="refresh" content="0;url=/">';
         } else {
           echo $error;
         }
@@ -105,18 +130,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="css/style.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="markitup/skins/markitup/style.css"/>
     <link rel="stylesheet" type="text/css" href="markitup/sets/markdown/style.css">
-      <link rel="stylesheet" type="text/css" href="markitup/image_upload/image_upload.css">
+    <link rel="stylesheet" type="text/css" href="markitup/image_upload/image_upload.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <script src="js/jquery-2.1.3.min.js"></script>
-    <script src="markitup/jquery.markitup.js"></script>
-    <script type="text/javascript" src="markitup/sets/markdown/set.js"></script>
-      <script type="text/javascript" src="js/jquery.form.min.js"></script>
-      <script type="text/javascript" src="markitup/image_upload/image_upload.js"></script>
     <style>
       .tips {
           margin: 20px 0;
@@ -134,41 +154,162 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <h3>提交漏洞</h3>
       <hr>
       <div class="tips">
+        <p>提交漏洞前，请查看漏洞列表以免重复提交。</p>
         <p>提交的漏洞将于24小时内被人工审核、评定 rank，审核通过的漏洞将展示在漏洞提交平台首页。重复提交的漏洞将不会被审核通过。</p>
-        <p>请准确填写身份信息和联系方式。由于身份信息、联系方式填写错误导致的问题，组委会不承担责任。</p>
+        <p>请准确填写身份信息和联系方式。</p>
       </div>
 
-        <form class="form-horizontal" method="post">
-        
+      <form class="form-horizontal" method="post">
+
         <div class="form-group">
-          <label for="domain" class="col-sm-2 control-label">漏洞域名</label>
+          <label for="type" class="col-sm-2 control-label">靶标类型</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="domain" name="domain" placeholder="*.ustc.edu.cn">
+            <select name="type" id="type" class="form-control">
+                <option value="1" selected>网站</option>
+                <option value="2">设备</option>
+                <option value="3">应用</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group target" id="domain-target">
+          <label for="domain" class="col-sm-2 control-label">靶标域名</label>
+          <div class="col-sm-3">
+              <input type="text" class="form-control" id="domain" name="domain" placeholder="*.ustc.edu.cn" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="form-group target" id="device-target" style="display:none">
+          <label for="domain" class="col-sm-2 control-label">设备名称</label>
+          <div class="col-sm-3">
+              <select name="device" id="device" class="form-control" id="device" name="device" autocomplete="off">
+              </select>
+          </div>
+        </div>
+
+        <div class="form-group target" id="app-target" style="display:none">
+          <label for="domain" class="col-sm-2 control-label">应用名称</label>
+          <div class="col-sm-3">
+              <input type="text" class="form-control" id="app" name="app" autocomplete="off">
           </div>
         </div>
 
         <div class="form-group">
           <label for="title" class="col-sm-2 control-label">漏洞标题</label>
           <div class="col-sm-9">
-              <input type="text" class="form-control" id="title" name="title" placeholder="">
+              <input type="text" class="form-control" id="title" name="title"
+                        placeholder="对漏洞的简要描述，可以简单描述漏洞的危害和成因，不要透漏漏洞的细节">
           </div>
         </div>
 
         <div class="form-group">
-          <label for="rank" class="col-sm-2 control-label">自评Rank</label>
-          <div class="col-sm-3">
-              <input type="text" class="form-control" id="rank" name="rank" placeholder="1-20，危害越高，Rank越大">
+          <label class="col-sm-2 control-label">漏洞危害<br /><span style="font-weight:normal">(<a href="http://www.first.org/cvss/cvss-guide.html" target="_blank">详细说明</a>)</span></label>
+          <div class="col-sm-4">
+            <div>
+                <label for="base-av" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric reflects how the vulnerability is exploited.  The more remote an attacker can be to attack a host, the greater the vulnerability score." data-title="Access Vector" id="base-av">Access Vector</span></label>
+                <div class="btn-group btn-group-sm" data-toggle="buttons">
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Requires the attacker to have either physical access to the vulnerable system or a local (shell) account." id="rb-av-l">
+                        <input type="radio" name="rb-av" value="r000">Local
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Requires the attacker to have access to either the broadcast or collision domain of the vulnerable software." id="rb-av-a">
+                        <input type="radio" name="rb-av" value="r001">Adjacent Network
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="The vulnerable software is bound to the network stack and the attacker does not require local network access or local access." id="rb-av-n">
+                        <input type="radio" name="rb-av" value="r002">Network
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label for="base-ac" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the complexity of the attack required to exploit the vulnerability once an attacker has gained access to the target system.  The lower the required complexity, the higher the vulnerability score." data-title="Access Complexity" id="base-ac">Access Complexity</span></label>
+                <div class="btn-group btn-group-sm" data-toggle="buttons">
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Specialized access conditions exist." id="rb-ac-h">
+                        <input type="radio" name="rb-ac" value="r010">High
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="The access conditions are somewhat specialized." id="rb-ac-m">
+                        <input type="radio" name="rb-ac" value="r011">Medium
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Specialized access conditions or extenuating circumstances do not exist." id="rb-ac-l">
+                        <input type="radio" name="rb-ac" value="r012">Low
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label for="base-au" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the number of times an attacker must authenticate to a target in order to exploit a vulnerability. The fewer authentication instances that are required, the higher the vulnerability score." data-title="Authentication" id="base-au">Authentication</span></label>
+                <div class="btn-group btn-group-sm" data-toggle="buttons">
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Exploiting the vulnerability requires that the attacker authenticate two or more times, even if the same credentials are used each time." id="rb-au-m">
+                        <input type="radio" name="rb-au" value="r020">Multiple
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Requires an attacker to be logged into the system (such as at a command line or via a desktop session or web interface)." id="rb-au-s">
+                        <input type="radio" name="rb-au" value="r021">Single
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Authentication is not required to exploit the vulnerability." id="rb-au-n">
+                        <input type="radio" name="rb-au" value="r022">None
+                    </label>
+                </div>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div>
+                <label for="base-c" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the impact on confidentiality of a successfully exploited vulnerability.  Increased confidentiality impact increases the vulnerability score." data-title="Confidentiality Impact" id="base-c">Confidentiality Impact</span></label>
+                <div class="btn-group btn-group-sm" data-toggle="buttons">
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="There is no impact to the confidentiality of the system." id="rb-c-n">
+                        <input type="radio" name="rb-c" value="r030">None
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="There is considerable informational disclosure." id="rb-c-p">
+                        <input type="radio" name="rb-c" value="r031">Partial
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="There is total information disclosure, resulting in all system files being revealed." id="rb-c-c">
+                        <input type="radio" name="rb-c" value="r032">Complete
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label for="base-i" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the impact to integrity of a successfully exploited vulnerability.  Increased integrity impact increases the vulnerability score." data-title="Integrity Impact" id="base-i">Integrity Impact</span></label>
+                <div class="btn-group btn-group-sm" data-toggle="buttons">
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="There is no impact to the integrity of the system." id="rb-i-n">
+                        <input type="radio" name="rb-i" value="r040">None
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Modification of some system files or information is possible, but the attacker does not have control over what can be modified, or the scope of what the attacker can affect is limited." id="rb-i-p">
+                        <input type="radio" name="rb-i" value="r041">Partial
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="There is a total compromise of system integrity." id="rb-i-c">
+                        <input type="radio" name="rb-i" value="r042">Complete
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label for="base-a" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the impact to availability of a successfully exploited vulnerability. Increased availability impact increases the vulnerability score." data-title="Availability Impact" id="base-a">Availability Impact</span></label>
+                <div class="btn-group btn-group-sm" data-toggle="buttons">
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="There is no impact to the availability of the system." id="rb-a-n">
+                        <input type="radio" name="rb-a" value="r050">None
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="There is reduced performance or interruptions in resource availability." id="rb-a-p">
+                        <input type="radio" name="rb-a" value="r051">Partial
+                    </label>
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="There is a total shutdown of the affected resource." id="rb-a-c">
+                        <input type="radio" name="rb-a" value="r052">Complete
+                    </label>
+                </div>
+            </div>
+
           </div>
         </div>
-
+
         <div class="form-group">
-          <label for="abstract" class="col-sm-2 control-label">问题描述</label>
+          <label for="score" class="col-sm-2 control-label">漏洞得分</label>
           <div class="col-sm-9">
-              <textarea type="text" class="form-control" rows="5" id="abstract" name="abstract"
-                        placeholder="对漏洞的简要描述，可以简单描述漏洞的危害和成因，不要透漏漏洞的细节"></textarea>
+            <h4><label class="label label-default" id="target-rank">100</label> × <label class="label label-default" id="score">0</label> = <label class="label label-default" id="total-score">0</label> <span style="font-size:12px">（根据靶标名称和漏洞危害自动生成）</span></h4>
+            <input type="hidden" id="input-target-rank" name="target-rank" value="0">
+            <input type="hidden" id="vector-score" name="vector-score" value="0">
+            <input type="hidden" id="vector" name="vector" value="AV:L/AC:H/Au:M/C:N/I:N/A:N">
           </div>
         </div>
-
+ 
         <div class="form-group">
           <label for="detail" class="col-sm-2 control-label">详细说明</label>
           <div class="col-sm-9">
@@ -294,34 +435,107 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </body>
   <!-- Bootstrap core JavaScript -->
   <!-- Placed at the end of the document so the pages load faster -->
-  <!--<script src="js/jquery.min.js"></script>-->
-  <script src="js/bootstrap.min.js"></script>
-  <script>
+  <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+  <script type="text/javascript" src="markitup/jquery.markitup.js"></script>
+  <script type="text/javascript" src="markitup/sets/markdown/set.js"></script>
+  <script type="text/javascript" src="js/jquery.form.min.js"></script>
+  <script type="text/javascript" src="markitup/image_upload/image_upload.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/cvss2.js"></script>
+  <script type="text/javascript" src="js/bootstrap-typeahead.js"></script>
+  <script type="text/javascript" src="js/data.js"></script>
+  <script type="text/javascript">
       $(document).ready(function () {
-          $('#domain').focus();
           $('#detail').markItUp(mySettings);
           $('#fix_method').markItUp(mySettings);
+          var domainList = [];
+          for (domain in domainScores) {
+              domainList.push(domain);
+          }
+          $('#domain').typeahead({
+              source: domainList,
+              minLength: 2,
+              items: 10
+          });
+          for (device in deviceScores) {
+              $('#device').append('<option value="' + device + '">' + device + '</option>');
+          }
+      });
+
+      function update_total_score() {
+          $("#total-score").text($("#target-rank").text() * $("#score").text());
+      }
+
+      $("#type").on('change', function(event){
+          $(".target").hide();
+          switch ($("#type").val()) {
+          case '1': $("#domain-target").show(); break;
+          case '2': $("#device-target").show(); break;
+          case '3': $("#app-target").show(); break;
+          }
+      });
+
+      $("#domain").on('change', function(event){
+          domain = $("#domain").val().trim();
+          if (domain in domainScores)
+              rank = domainScores[domain];
+          else
+              rank = 100;
+          $("#target-rank").text(rank);
+          update_total_score();
+      });
+
+      $("#device").on('change', function(event){
+          device = $("#device").val().trim();
+          if (device in deviceScores)
+              rank = deviceScores[device];
+          else
+              rank = 0;
+          $("#target-rank").text(rank);
+          update_total_score();
+      });
+
+      $("#app").on('change', function(event){
+          $("#target-rank").text(300);
+          update_total_score();
       });
 
       //前端验证表单
 
       $("#submit").on('click',function(event){
         var err=0,msg="";
-        if($("#domain").val().length<=12||$("#domain").val().substr(-12,12)!=".ustc.edu.cn"){
-          err=1;
-          msg+="请输入以.ustc.edu.cn结尾的域名！<br>";
+        switch ($("#type").val()) {
+        case '1':
+            if($("#domain").val().length<=12||$("#domain").val().substr(-12,12)!=".ustc.edu.cn"){
+              err=1;
+              msg+="请输入以 .ustc.edu.cn 结尾的域名！<br>";
+            }
+            break;
+        case '2':
+            break;
+        case '3':
+            if ($("#app").val().trim() == "") {
+                err=1;
+                msg+="请输入应用名称！<br>";
+            }
+            break;
         }
+
+        if($("#vector").val() == ""){
+          err=1;
+          msg+="请选择漏洞危害！<br>";
+        }
+        if($("#total-score").text()==0){
+          err=1;
+          msg+="有危害的才叫漏洞，请选择漏洞危害！<br>";
+        }
+
+        $("#input-target-rank").val($("#target-rank").text());
+        $("#vector-score").val($("#score").text());
+
         if($("#title").val()==""){
           err=1;
-          msg+="标题不能为空！<br>";
-        }
-        if($("#rank").val()==""||isNaN($("#rank").val())||$("#rank").val()<1||$("#rank").val()>20){
-          err=1;
-          msg+="自评Rank需要为1-20的整数！<br>";
-        }
-        if($("#abstract").val()==""){
-          err=1;
-          msg+="问题描述不能为空！<br>";
+          msg+="漏洞标题不能为空！<br>";
         }
         if($("#detail").val()==""){
           err=1;
