@@ -7,6 +7,7 @@
  */
 try {
     $con = new PDO('mysql:host=127.0.0.1;dbname=whitehat;charset=utf8', 'whitehat', 'whitehat');
+    $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    print "Error: " . $e->getMessage() . "</br>";
+    print "Connection failed: " . $e->getMessage() . "</br>";
 }
