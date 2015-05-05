@@ -1,7 +1,7 @@
 <?php
 require("PHPMailer/PHPMailerAutoload.php");
 
-function sendmail($subject,$body){
+function sendmail($email,$username,$subject,$body){
 
 	$mail = new PHPMailer();
 
@@ -12,6 +12,8 @@ function sendmail($subject,$body){
 
 	$mail->From = "submit@whitehat.lug.ustc.edu.cn";
 	$mail->FromName = "白帽子大赛";
+
+    $mail->AddAddress($email, $username);
 
 	//$address = "staff@lug.ustc.edu.cn";
 	//$mail->AddAddress($address, "staff");
