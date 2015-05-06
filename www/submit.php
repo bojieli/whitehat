@@ -4,7 +4,7 @@ require_once("sendmail.php");
 session_start();
 session_destroy();
 $right = true;
-$error = "";
+$error = '<meta charset="utf-8">';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["button"]) && ($_POST["button"] == "create")) {
         if (!(isset($_POST["type"]))) {
@@ -206,46 +206,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <label class="col-sm-2 control-label">漏洞危害<br /><span style="font-weight:normal">(<a href="http://www.first.org/cvss/cvss-guide.html" target="_blank">详细说明</a>)</span></label>
           <div class="col-sm-4">
             <div>
-                <label for="base-av" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric reflects how the vulnerability is exploited.  The more remote an attacker can be to attack a host, the greater the vulnerability score." data-title="Access Vector" id="base-av">Access Vector</span></label>
+                <label for="base-av" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric reflects how the vulnerability is exploited.  The more remote an attacker can be to attack a host, the greater the vulnerability score." data-title="Access Vector" id="base-av">攻击途径</span></label>
                 <div class="btn-group btn-group-sm" data-toggle="buttons">
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Requires the attacker to have either physical access to the vulnerable system or a local (shell) account." id="rb-av-l">
-                        <input type="radio" name="rb-av" value="r000">Local
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="需要攻击者拥有受攻击系统的物理访问权限或者本地(shell)账号" id="rb-av-l">
+                        <input type="radio" name="rb-av" value="r000">本地
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Requires the attacker to have access to either the broadcast or collision domain of the vulnerable software." id="rb-av-a">
-                        <input type="radio" name="rb-av" value="r001">Adjacent Network
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="需要攻击者拥有受攻击系统的广播域或冲突域访问权限" id="rb-av-a">
+                        <input type="radio" name="rb-av" value="r001">邻近网络
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="The vulnerable software is bound to the network stack and the attacker does not require local network access or local access." id="rb-av-n">
-                        <input type="radio" name="rb-av" value="r002">Network
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="受攻击系统在远程网络上，攻击者不需要受攻击系统的本地访问权限和本地网络权限" id="rb-av-n">
+                        <input type="radio" name="rb-av" value="r002">远程
                     </label>
                 </div>
             </div>
 
             <div>
-                <label for="base-ac" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the complexity of the attack required to exploit the vulnerability once an attacker has gained access to the target system.  The lower the required complexity, the higher the vulnerability score." data-title="Access Complexity" id="base-ac">Access Complexity</span></label>
+                <label for="base-ac" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the complexity of the attack required to exploit the vulnerability once an attacker has gained access to the target system.  The lower the required complexity, the higher the vulnerability score." data-title="Access Complexity" id="base-ac">攻击复杂度</span></label>
                 <div class="btn-group btn-group-sm" data-toggle="buttons">
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Specialized access conditions exist." id="rb-ac-h">
-                        <input type="radio" name="rb-ac" value="r010">High
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="存在特定的攻击条件" id="rb-ac-h">
+                        <input type="radio" name="rb-ac" value="r010">高
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="The access conditions are somewhat specialized." id="rb-ac-m">
-                        <input type="radio" name="rb-ac" value="r011">Medium
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="存在部分特定的攻击条件" id="rb-ac-m">
+                        <input type="radio" name="rb-ac" value="r011">中
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Specialized access conditions or extenuating circumstances do not exist." id="rb-ac-l">
-                        <input type="radio" name="rb-ac" value="r012">Low
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="不存在特定的攻击条件或特殊情况" id="rb-ac-l">
+                        <input type="radio" name="rb-ac" value="r012">低
                     </label>
                 </div>
             </div>
 
             <div>
-                <label for="base-au" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the number of times an attacker must authenticate to a target in order to exploit a vulnerability. The fewer authentication instances that are required, the higher the vulnerability score." data-title="Authentication" id="base-au">Authentication</span></label>
+                <label for="base-au" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the number of times an attacker must authenticate to a target in order to exploit a vulnerability. The fewer authentication instances that are required, the higher the vulnerability score." data-title="Authentication" id="base-au">认证</span></label>
                 <div class="btn-group btn-group-sm" data-toggle="buttons">
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Exploiting the vulnerability requires that the attacker authenticate two or more times, even if the same credentials are used each time." id="rb-au-m">
-                        <input type="radio" name="rb-au" value="r020">Multiple
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="攻击者需要验证两次以上，即使每次都使用相同的账号。" id="rb-au-m">
+                        <input type="radio" name="rb-au" value="r020">多次认证
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Requires an attacker to be logged into the system (such as at a command line or via a desktop session or web interface)." id="rb-au-s">
-                        <input type="radio" name="rb-au" value="r021">Single
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="攻击者需要一次验证。(例如通过终端登录或使用网页/客户端的session验证)" id="rb-au-s">
+                        <input type="radio" name="rb-au" value="r021">单次认证
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Authentication is not required to exploit the vulnerability." id="rb-au-n">
-                        <input type="radio" name="rb-au" value="r022">None
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="攻击时无需验证" id="rb-au-n">
+                        <input type="radio" name="rb-au" value="r022">无
                     </label>
                 </div>
             </div>
@@ -253,53 +253,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
           <div class="col-sm-4">
             <div>
-                <label for="base-c" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the impact on confidentiality of a successfully exploited vulnerability.  Increased confidentiality impact increases the vulnerability score." data-title="Confidentiality Impact" id="base-c">Confidentiality Impact</span></label>
+                <label for="base-c" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the impact on confidentiality of a successfully exploited vulnerability.  Increased confidentiality impact increases the vulnerability score." data-title="Confidentiality Impact" id="base-c">机密性影响</span></label>
                 <div class="btn-group btn-group-sm" data-toggle="buttons">
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="There is no impact to the confidentiality of the system." id="rb-c-n">
-                        <input type="radio" name="rb-c" value="r030">None
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="对系统的机密性无影响" id="rb-c-n">
+                        <input type="radio" name="rb-c" value="r030">无影响
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="There is considerable informational disclosure." id="rb-c-p">
-                        <input type="radio" name="rb-c" value="r031">Partial
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="有大量的信息泄露，但范围有限" id="rb-c-p">
+                        <input type="radio" name="rb-c" value="r031">部分影响
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="There is total information disclosure, resulting in all system files being revealed." id="rb-c-c">
-                        <input type="radio" name="rb-c" value="r032">Complete
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="全部信息泄露，攻击者可读取所有系统数据" id="rb-c-c">
+                        <input type="radio" name="rb-c" value="r032">完全影响
                     </label>
                 </div>
             </div>
 
             <div>
-                <label for="base-i" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the impact to integrity of a successfully exploited vulnerability.  Increased integrity impact increases the vulnerability score." data-title="Integrity Impact" id="base-i">Integrity Impact</span></label>
+                <label for="base-i" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the impact to integrity of a successfully exploited vulnerability.  Increased integrity impact increases the vulnerability score." data-title="Integrity Impact" id="base-i">完整性影响</span></label>
                 <div class="btn-group btn-group-sm" data-toggle="buttons">
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="There is no impact to the integrity of the system." id="rb-i-n">
-                        <input type="radio" name="rb-i" value="r040">None
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="对系统的完整性无影响" id="rb-i-n">
+                        <input type="radio" name="rb-i" value="r040">无影响
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Modification of some system files or information is possible, but the attacker does not have control over what can be modified, or the scope of what the attacker can affect is limited." id="rb-i-p">
-                        <input type="radio" name="rb-i" value="r041">Partial
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="可能对一些系统文件或信息进行修改，但攻击者不能控制修改哪些信息，或攻击者能修改的数据范围有限。" id="rb-i-p">
+                        <input type="radio" name="rb-i" value="r041">部分影响
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="There is a total compromise of system integrity." id="rb-i-c">
-                        <input type="radio" name="rb-i" value="r042">Complete
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="完全影响系统的完整性" id="rb-i-c">
+                        <input type="radio" name="rb-i" value="r042">完全影响
                     </label>
                 </div>
             </div>
 
             <div>
-                <label for="base-a" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the impact to availability of a successfully exploited vulnerability. Increased availability impact increases the vulnerability score." data-title="Availability Impact" id="base-a">Availability Impact</span></label>
+                <label for="base-a" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the impact to availability of a successfully exploited vulnerability. Increased availability impact increases the vulnerability score." data-title="Availability Impact" id="base-a">可用性影响</span></label>
                 <div class="btn-group btn-group-sm" data-toggle="buttons">
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="There is no impact to the availability of the system." id="rb-a-n">
-                        <input type="radio" name="rb-a" value="r050">None
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="对系统可用性无影响" id="rb-a-n">
+                        <input type="radio" name="rb-a" value="r050">无影响
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="There is reduced performance or interruptions in resource availability." id="rb-a-p">
-                        <input type="radio" name="rb-a" value="r051">Partial
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="降低性能或导致一些资源访问中断" id="rb-a-p">
+                        <input type="radio" name="rb-a" value="r051">部分影响
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="There is a total shutdown of the affected resource." id="rb-a-c">
-                        <input type="radio" name="rb-a" value="r052">Complete
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="top" title="导致受攻击资源的完全宕掉" id="rb-a-c">
+                        <input type="radio" name="rb-a" value="r052">完全影响
                     </label>
                 </div>
             </div>
 
           </div>
         </div>
-
+
+
         <div class="form-group">
           <label for="score" class="col-sm-2 control-label">漏洞得分</label>
           <div class="col-sm-9">
