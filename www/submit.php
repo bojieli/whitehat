@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if ($right) {
-            $total_score = intval($vector_score * $target_rank);
+            $total_score = round($vector_score * $target_rank);
             try {
                 $query = $con->prepare("INSERT INTO Loophole (domain_type,domain,vector,target_rank,score,title,detail,fix_method,username,gender,email,phone,anonymous,submit_time)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())");
                 $query->execute(array(
@@ -463,7 +463,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       });
 
       function update_total_score() {
-          $("#total-score").text($("#target-rank").text() * $("#score").text());
+          $("#total-score").text(Math.round($("#target-rank").text() * $("#score").text()));
       }
 
       $("#type").on('change', function(event){
