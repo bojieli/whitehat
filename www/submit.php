@@ -4,7 +4,7 @@ require_once("sendmail.php");
 session_start();
 session_destroy();
 $right = true;
-$error = "";
+$error = '<meta charset="utf-8">';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["button"]) && ($_POST["button"] == "create")) {
         if (!(isset($_POST["type"]))) {
