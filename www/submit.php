@@ -128,9 +128,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="markitup/skins/markitup/style.css"/>
-    <link rel="stylesheet" type="text/css" href="markitup/sets/markdown/style.css">
-    <link rel="stylesheet" type="text/css" href="markitup/image_upload/image_upload.css">
+      <!--<link rel="stylesheet" type="text/css" href="markitup/skins/markitup/style.css"/>
+      <link rel="stylesheet" type="text/css" href="markitup/sets/markdown/style.css">
+      <link rel="stylesheet" type="text/css" href="markitup/image_upload/image_upload.css">-->
+      <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="bower_components/bootstrap-markdown-editor/dist/css/bootstrap-markdown-editor.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -314,16 +316,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="detail" class="col-sm-2 control-label">详细说明</label>
           <div class="col-sm-9">
-              <textarea type="text" class="form-control" rows="10" id="detail" name="detail"
-                        placeholder="对漏洞的详细描述，请尽量多的深入细节以方便对漏洞的理解"></textarea>
+              <div type="text" rows="10" id="detail" name="detail"
+                   placeholder="对漏洞的详细描述，请尽量多的深入细节以方便对漏洞的理解"></div>
           </div>
         </div>
 
         <div class="form-group">
           <label for="fix_method" class="col-sm-2 control-label">漏洞修复</label>
           <div class="col-sm-9">
-              <textarea type="text" class="form-control" rows="10" id="fix_method" name="fix_method"
-                        placeholder="建议的漏洞修复方案"></textarea>
+              <div type="text" rows="10" id="fix_method" name="fix_method"
+                   placeholder="建议的漏洞修复方案"></div>
           </div>
         </div>
 
@@ -368,7 +370,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-4">
-            <img id="captcha-pic" title="点击刷新" src="captcha/captcha.php" onclick="this.src='captcha/captcha.php?'+Math.random();captcha_ok=0;"></img>
+              <img id="captcha-pic" title="点击刷新" src="captcha/captcha.php"
+                   onclick="this.src='captcha/captcha.php?'+Math.random();captcha_ok=0;"/>
           </div>
         </div>
 
@@ -437,18 +440,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <!-- Bootstrap core JavaScript -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
-  <script type="text/javascript" src="markitup/jquery.markitup.js"></script>
-  <script type="text/javascript" src="markitup/sets/markdown/set.js"></script>
+  -
+  <!--<script type="text/javascript" src="markitup/jquery.markitup.js"></script>
+  <script type="text/javascript" src="markitup/sets/markdown/set.js"></script>-->
   <script type="text/javascript" src="js/jquery.form.min.js"></script>
-  <script type="text/javascript" src="markitup/image_upload/image_upload.js"></script>
+  <!--<script type="text/javascript" src="markitup/image_upload/image_upload.js"></script>-->
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/cvss2.js"></script>
   <script type="text/javascript" src="js/bootstrap-typeahead.js"></script>
   <script type="text/javascript" src="js/data.js"></script>
+
+  <script src="bower_components/ace-builds/src-min/ace.js"></script>
+  <script src="bower_components/bootstrap-markdown-editor/dist/js/bootstrap-markdown-editor.js"></script>
+  -
   <script type="text/javascript">
       $(document).ready(function () {
-          $('#detail').markItUp(mySettings);
-          $('#fix_method').markItUp(mySettings);
+          var editorsettings = {
+              // Activate the preview:
+              preview: true,
+              // This callback is called when the user click on the preview button:
+              onPreview: function (content, callback) {
+                  imageUpload: true, // Activate the option
+                      uploadPath
+                  :
+                  'upload.php',
+
+                      // Example of implementation with ajax:
+                      $.ajax({
+                          url: 'preview.php',
+                          type: 'POST',
+                          dataType: 'html',
+                          data: {data: content}
+                      })
+                          .done(function (result) {
+                              // Return the html:
+                              callback(result);
+                          });
+
+              }
+          };
+          //$('#detail').markItUp(mySettings);
+          //$('#fix_method').markItUp(mySettings);
+          $('#detail').markdownEditor(editorsettings);
+          $('#fix_method').markdownEditor(editorsettings);
           var domainList = [];
           for (domain in domainScores) {
               domainList.push(domain);

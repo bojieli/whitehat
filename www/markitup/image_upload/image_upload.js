@@ -58,7 +58,7 @@ miu.ImageUpload = function () {
                 $('#miu_image_upload_image').focus();
             });
 
-            form.attr('action', markItUp.root + 'image_upload/image_upload.php');
+            form.attr('action', markItUp.root + 'image_upload/upload.php');
 
 
             form.ajaxForm({
