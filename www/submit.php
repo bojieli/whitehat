@@ -316,16 +316,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="detail" class="col-sm-2 control-label">详细说明</label>
           <div class="col-sm-9">
-              <div type="text" rows="10" id="detail" name="detail"
+              <div type="text" rows="10" id="detail-edit"
                    placeholder="对漏洞的详细描述，请尽量多的深入细节以方便对漏洞的理解"></div>
+              <textarea hidden="hidden" name="detail" id="detail"></textarea>
           </div>
         </div>
 
         <div class="form-group">
           <label for="fix_method" class="col-sm-2 control-label">漏洞修复</label>
           <div class="col-sm-9">
-              <div type="text" rows="10" id="fix_method" name="fix_method"
+              <div type="text" rows="10" id="fix_method-edit" name="fix_method"
                    placeholder="建议的漏洞修复方案"></div>
+              <textarea hidden="hidden" name="fix_method" id="fix_method"></textarea>
           </div>
         </div>
 
@@ -480,8 +482,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           };
           //$('#detail').markItUp(mySettings);
           //$('#fix_method').markItUp(mySettings);
-          $('#detail').markdownEditor(editorsettings);
-          $('#fix_method').markdownEditor(editorsettings);
+          $('#detail-edit').markdownEditor(editorsettings);
+          $('#fix_method-edit').markdownEditor(editorsettings);
           var domainList = [];
           for (domain in domainScores) {
               domainList.push(domain);
@@ -538,6 +540,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       $("#submit").on('click',function(event){
         var err=0,msg="";
+          $("#detail").val($('#detail-edit').markdownEditor('content'));
+          $("#fix_method").val($('#fix_method-edit').markdownEditor('content'));
         switch ($("#type").val()) {
         case '1':
             if($("#domain").val().length<=12||$("#domain").val().substr(-12,12)!=".ustc.edu.cn"){

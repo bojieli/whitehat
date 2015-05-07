@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Post Markdown Preview</title>
-    <link rel="stylesheet" type="text/css" href="~/templates/preview.css"/>
+    <link rel="stylesheet" type="text/css" href="css/preview.css"/>
 </head>
 <body>
 <?php include_once 'markdown.php'; ?>
