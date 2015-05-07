@@ -458,14 +458,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           var editorsettings = {
               // Activate the preview:
               preview: true,
+              imageUpload: true, // Activate the option
+              uploadPath: 'upload.php',
               // This callback is called when the user click on the preview button:
               onPreview: function (content, callback) {
-                  imageUpload: true, // Activate the option
-                      uploadPath
-                  :
-                  'upload.php',
 
-                      // Example of implementation with ajax:
+
+                  // Example of implementation with ajax:
                       $.ajax({
                           url: 'preview.php',
                           type: 'POST',
