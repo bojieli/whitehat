@@ -172,6 +172,9 @@ else {
           font-size: 16px;
           color: #999;
       }
+      div.modal-backdrop {
+        z-index: -1;
+      }
     </style>
   </head>
 
