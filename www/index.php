@@ -36,7 +36,8 @@
 
       <div>
         <h4>白帽子排行榜</h4>
-        <table class="table table-striped table-bordered table-hover">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
                 <th>排名</th>
@@ -72,7 +73,8 @@
             }
             ?>
             </tbody>
-        </table>
+          </table>
+        </div>
       </div>
 
       <div>
