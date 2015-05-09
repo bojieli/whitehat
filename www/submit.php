@@ -417,8 +417,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
       </form>
-    </div>
     <?php require("footer.php");?>
+    </div>
 
     <!-- 错误提示模态框 -->
     <div class="modal fade" id="modal-error" tabindex="-1" role="dialog" aria-labelledby="modal-error-label" aria-hidden="true">
