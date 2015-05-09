@@ -76,48 +76,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             try {
                 $query = $con->prepare("UPDATE Loophole SET domain_type=?, domain=?, vector=?, target_rank=?, score=?, title=?, detail=?, fix_method=?, reviewer=?, verified=?, review_msg=?, review_time=? WHERE id=?");
                 $query->execute(array(
-                  htmlspecialchars($_POST["type"]),
-                  htmlspecialchars($domain),
-                  htmlspecialchars($_POST["vector"]),
-                  intval($_POST["target-rank"]),
-                  $total_score,
-                  htmlspecialchars($_POST["title"]),
-                  htmlspecialchars($_POST["detail"]),
-                  htmlspecialchars($_POST["fix_method"]),
-                  htmlspecialchars($_POST["reviewer"]),
-                  intval($_POST["review_status"]),
-                  htmlspecialchars($_POST["review_msg"]),
-                  date("Y-m-d H:i:s", time()),
-                  intval($_POST["id"]),
+                    htmlspecialchars($_POST["type"]),
+                    htmlspecialchars($domain),
+                    htmlspecialchars($_POST["vector"]),
+                    intval($_POST["target-rank"]),
+                    $total_score,
+                    htmlspecialchars($_POST["title"]),
+                    htmlspecialchars($_POST["detail"]),
+                    htmlspecialchars($_POST["fix_method"]),
+                    htmlspecialchars($_POST["reviewer"]),
+                    intval($_POST["review_status"]),
+                    htmlspecialchars($_POST["review_msg"]),
+                    date("Y-m-d H:i:s", time()),
+                    intval($_POST["id"]),
                 ));
             } catch (PDOException $e) {
                 echo "Database Error: cannot Insert!: " . $e->getMessage();
                 exit();
             }
             $mail_title =
-              ($_POST['review_status'] == 1 ? "[审核通过] ":"[审核未通过] ").
-              htmlspecialchars($_POST["title"]);
+                ($_POST['review_status'] == 1 ? "[审核通过] ":"[审核未通过] ").
+                htmlspecialchars($_POST["title"]);
 
             $mail_content =
-                ($_POST['review_status'] == 1 ? 
-                "恭喜您在白帽子安全技术挑战赛中提交的漏洞已被审核通过，获得 $total_score 分！<br><br>" : 
+                ($_POST['review_status'] == 1 ?
+                "恭喜您在白帽子安全技术挑战赛中提交的漏洞已被审核通过，获得 $total_score 分！<br><br>" :
                 "很遗憾，您在白帽子安全技术挑战赛中提交的漏洞未被审核通过。原因是：".htmlspecialchars($_POST["review_msg"])."<br><br>").
-              "<b>漏洞ID:</b> ".htmlspecialchars($_POST["id"])."<br><br>".
-              "<b>靶标:</b> ".htmlspecialchars($domain)." ($target_rank 分)<br><br>".
-              "<b>标题:</b> ".htmlspecialchars($_POST["title"])."<br><br>".
-              "<b>危害向量:</b> ".htmlspecialchars($_POST["vector"])."<br><br>".
-              "<b>得分: $total_score</b> = $target_rank * $vector_score<br><br>".
-              "<b>审核意见:</b> ".htmlspecialchars($_POST["review_msg"])."<br><br>".
-              "<b>详细说明:</b> ".htmlspecialchars($_POST["detail"])."<br><br>".
-              "<b>修复方法:</b> ".htmlspecialchars($_POST["fix_method"])."<br><br>".
-              "如果您对审核结果有任何疑问，请回复本邮件联系我们。";
+                "<b>漏洞ID:</b> ".htmlspecialchars($_POST["id"])."<br><br>".
+                "<b>靶标:</b> ".htmlspecialchars($domain)." ($target_rank 分)<br><br>".
+                "<b>标题:</b> ".htmlspecialchars($_POST["title"])."<br><br>".
+                "<b>危害向量:</b> ".htmlspecialchars($_POST["vector"])."<br><br>".
+                "<b>得分: $total_score</b> = $target_rank * $vector_score<br><br>".
+                "<b>审核意见:</b> ".htmlspecialchars($_POST["review_msg"])."<br><br>".
+                "<b>详细说明:</b> ".htmlspecialchars($_POST["detail"])."<br><br>".
+                "<b>修复方法:</b> ".htmlspecialchars($_POST["fix_method"])."<br><br>".
+                "如果您对审核结果有任何疑问，请回复本邮件联系我们。";
 
             sendmail($_POST['email'], $_POST['username'], $mail_title, $mail_content);
             sendmail('whitehat@ustclug.org', 'staff', $mail_title, $mail_content);
 
             echo '<meta charset="utf-8"><script>alert("提交成功！");</script><meta http-equiv="refresh" content="0;url=/">';
         } else {
-          echo $error;
+            echo $error;
         }
         exit();
     }
@@ -347,7 +347,7 @@ else {
             <input type="hidden" id="vector" name="vector" value="<?php echo $row['vector'] ?>">
           </div>
         </div>
- 
+
         <div class="form-group">
           <label for="detail" class="col-sm-2 control-label">详细说明</label>
           <div class="col-sm-9">
@@ -473,7 +473,7 @@ else {
           <div class="modal-body" id="error-message">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" 
+            <button type="button" class="btn btn-default"
               data-dismiss="modal">确定
             </button>
           </div>
@@ -499,178 +499,178 @@ else {
   <script type="text/javascript" src="bower_components/bootstrap-markdown-editor/dist/js/bootstrap-markdown-editor.js"></script>
   <script type="text/javascript" src="js/marked.min.js"></script>
 
-  <script type="text/javascript">
-      $(document).ready(function () {
-          var editorsettings = {
-              fontSize: '14px',
-              // Activate the preview:
-              preview: true,
-              imageUpload: true, // Activate the option
-              uploadPath: 'upload.php',
-              // This callback is called when the user click on the preview button:
-              onPreview: function (content, callback) {
-                callback(marked(content));
-              },
-              fullscreen: false
-          };
-          $('#detail-edit').markdownEditor(editorsettings);
-          $('#fix_method-edit').markdownEditor(editorsettings);
-          $('#review_msg-edit').markdownEditor(editorsettings);
-          var domainList = [];
-          for (domain in domainScores) {
-              domainList.push(domain);
-          }
-          $('#domain').typeahead({
-              source: domainList,
-              minLength: 2,
-              items: 10
-          });
-          for (device in deviceScores) {
-              $('#device').append('<option value="' + device + '"' +
-                + (device == "<?=$row['domain']?>" ? ' selected ' : '')
-                + '>'
-                + device
-                + '</option>');
-          }
-      });
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var editorsettings = {
+            fontSize: '14px',
+                // Activate the preview:
+                preview: true,
+                imageUpload: true, // Activate the option
+                uploadPath: 'upload.php',
+                // This callback is called when the user click on the preview button:
+                onPreview: function (content, callback) {
+                    callback(marked(content));
+},
+    fullscreen: false
+};
+$('#detail-edit').markdownEditor(editorsettings);
+$('#fix_method-edit').markdownEditor(editorsettings);
+$('#review_msg-edit').markdownEditor(editorsettings);
+var domainList = [];
+for (domain in domainScores) {
+    domainList.push(domain);
+}
+$('#domain').typeahead({
+    source: domainList,
+        minLength: 2,
+        items: 10
+});
+for (device in deviceScores) {
+    $('#device').append('<option value="' + device + '"' +
+        + (device == "<?=$row['domain']?>" ? ' selected ' : '')
+        + '>'
+        + device
+        + '</option>');
+}
+});
 
-      function update_total_score() {
-          $("#total-score").text(Math.round($("#target-rank").text() * $("#score").text()));
-      }
+function update_total_score() {
+    $("#total-score").text(Math.round($("#target-rank").text() * $("#score").text()));
+}
 
-      $("#type").on('change', function(event){
-          $(".target").hide();
-          switch ($("#type").val()) {
-          case '1':
-              $("#domain-target").show();
-              $("#domain").change();
-              break;
-          case '2':
-              $("#device-target").show();
-              $("#device").change();
-              break;
-          case '3':
-              $("#app-target").show();
-              $("#app").change();
-              break;
-          }
-      });
-      $("#type").change();
+$("#type").on('change', function(event){
+    $(".target").hide();
+    switch ($("#type").val()) {
+    case '1':
+        $("#domain-target").show();
+        $("#domain").change();
+        break;
+    case '2':
+        $("#device-target").show();
+        $("#device").change();
+        break;
+    case '3':
+        $("#app-target").show();
+        $("#app").change();
+        break;
+}
+});
+$("#type").change();
 
-      $("#domain").on('change', function(event){
-          domain = $("#domain").val().trim();
-          if (domain in domainScores)
-              rank = domainScores[domain];
-          else
-              rank = 100;
-          $("#target-rank").text(rank);
-          update_total_score();
-      });
+$("#domain").on('change', function(event){
+    domain = $("#domain").val().trim();
+    if (domain in domainScores)
+        rank = domainScores[domain];
+    else
+        rank = 100;
+    $("#target-rank").text(rank);
+    update_total_score();
+});
 
-      $("#device").on('change', function(event){
-          device = $("#device").val().trim();
-          if (device in deviceScores)
-              rank = deviceScores[device];
-          else
-              rank = 0;
-          $("#target-rank").text(rank);
-          update_total_score();
-      });
+$("#device").on('change', function(event){
+    device = $("#device").val().trim();
+    if (device in deviceScores)
+        rank = deviceScores[device];
+    else
+        rank = 0;
+    $("#target-rank").text(rank);
+    update_total_score();
+});
 
-      $("#app").on('change', function(event){
-          $("#target-rank").text(300);
-          update_total_score();
-      });
+$("#app").on('change', function(event){
+    $("#target-rank").text(300);
+    update_total_score();
+});
 
-      //前端验证表单
+//前端验证表单
 
-      function do_submit(){
-          var err=0,msg="";
-          $("#detail").val($('#detail-edit').markdownEditor('content'));
-          $("#fix_method").val($('#fix_method-edit').markdownEditor('content'));
-          $("#review_msg").val($('#review_msg-edit').markdownEditor('content'));
-        switch ($("#type").val()) {
-        case '1':
-            if($("#domain").val().length<=12||$("#domain").val().substr(-12,12)!=".ustc.edu.cn"){
-              err=1;
-              msg+="请输入以 .ustc.edu.cn 结尾的域名！<br>";
-            }
-            break;
-        case '2':
-            break;
-        case '3':
-            if ($("#app").val().trim() == "") {
-                err=1;
-                msg+="请输入应用名称！<br>";
-            }
-            break;
-        }
+function do_submit(){
+    var err=0,msg="";
+    $("#detail").val($('#detail-edit').markdownEditor('content'));
+    $("#fix_method").val($('#fix_method-edit').markdownEditor('content'));
+    $("#review_msg").val($('#review_msg-edit').markdownEditor('content'));
+    switch ($("#type").val()) {
+    case '1':
+        if($("#domain").val().length<=12||$("#domain").val().substr(-12,12)!=".ustc.edu.cn"){
+            err=1;
+            msg+="请输入以 .ustc.edu.cn 结尾的域名！<br>";
+}
+break;
+case '2':
+    break;
+case '3':
+    if ($("#app").val().trim() == "") {
+        err=1;
+        msg+="请输入应用名称！<br>";
+}
+break;
+}
 
-        if($("#vector").val() == ""){
-          err=1;
-          msg+="请选择漏洞危害！<br>";
-        }
-        if($("#total-score").text()==0){
-          err=1;
-          msg+="有危害的才叫漏洞，请选择漏洞危害！<br>";
-        }
+if($("#vector").val() == ""){
+    err=1;
+    msg+="请选择漏洞危害！<br>";
+}
+if($("#total-score").text()==0){
+    err=1;
+    msg+="有危害的才叫漏洞，请选择漏洞危害！<br>";
+}
 
-        $("#input-target-rank").val($("#target-rank").text());
-        $("#vector-score").val($("#score").text());
+$("#input-target-rank").val($("#target-rank").text());
+$("#vector-score").val($("#score").text());
 
-        if($("#title").val()==""){
-          err=1;
-          msg+="漏洞标题不能为空！<br>";
-        }
-        if($("#detail").val()==""){
-          err=1;
-          msg+="详细说明不能为空！<br>";
-        }
-        if($("#fix_method").val()==""){
-          err=1;
-          msg+="漏洞修复不能为空！<br>";
-        }
-        if($("#reviewer").val()=="") {
-          err=1;
-          msg+="请填写审核者昵称！<br>";
-        }
-        if(!captcha_ok){
-          err=1;
-          msg+="验证码有误！<br>";
-        }
+if($("#title").val()==""){
+    err=1;
+    msg+="漏洞标题不能为空！<br>";
+}
+if($("#detail").val()==""){
+    err=1;
+    msg+="详细说明不能为空！<br>";
+}
+if($("#fix_method").val()==""){
+    err=1;
+    msg+="漏洞修复不能为空！<br>";
+}
+if($("#reviewer").val()=="") {
+    err=1;
+    msg+="请填写审核者昵称！<br>";
+}
+if(!captcha_ok){
+    err=1;
+    msg+="验证码有误！<br>";
+}
 
-        if(err==1){
-          $("#error-message").html(msg);
-          $("#modal-error").modal('show');
-          return false;
-        }
-      }
+if(err==1){
+    $("#error-message").html(msg);
+    $("#modal-error").modal('show');
+    return false;
+}
+}
 
-      $("#submit-pass").on('click', function(){
-          $("#review_status").val(1);
-          return do_submit();
-      });
-      $("#submit-decline").on('click', function() {
-          $("#review_status").val(2);
-          return do_submit();
-      });
+$("#submit-pass").on('click', function(){
+    $("#review_status").val(1);
+    return do_submit();
+});
+$("#submit-decline").on('click', function() {
+    $("#review_status").val(2);
+    return do_submit();
+});
 
-      //ajax验证码
-      var captcha_ok=0;
-      function check_captcha(){
-        $.post("captcha/check.php",{captcha:$("#captcha").val()},function(data,status){
-          if(status=="success"){
+//ajax验证码
+var captcha_ok=0;
+function check_captcha(){
+    $.post("captcha/check.php",{captcha:$("#captcha").val()},function(data,status){
+        if(status=="success"){
             if(data=="0"){//验证码错误
-              $("#captcha-form").addClass("has-error");
-              $("#captcha-pic")[0].src='captcha/captcha.php?'+Math.random();
-              captcha_ok=0;
-            }else{//正确
-              $("#captcha-form").removeClass("has-error");
-              captcha_ok=1;
-            }
-          }
-        });
-      }
-  </script>
+                $("#captcha-form").addClass("has-error");
+                $("#captcha-pic")[0].src='captcha/captcha.php?'+Math.random();
+                captcha_ok=0;
+}else{//正确
+    $("#captcha-form").removeClass("has-error");
+    captcha_ok=1;
+}
+}
+});
+}
+</script>
 </html>
 <?php }
