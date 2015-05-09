@@ -72,6 +72,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = $error . "靶标价值有误！<br>";
         }
 
+        if(!isset($_POST["agree"])) {
+            $right = false;
+            $error = $error . "请同意比赛规则！<br>";
+        }
         if ($right) {
             $total_score = round($vector_score * $target_rank);
             try {
@@ -500,7 +504,7 @@ $(document).ready(function () {
                   return;
               }
           });
- 
+
           $(".form-remember").change(function(){
               var id = $(this).attr('id');
               var enc = window.btoa(unescape(encodeURIComponent($(this).val())));
