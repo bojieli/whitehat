@@ -63,8 +63,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!is_numeric($_POST['vector-score']) || $_POST['vector-score'] <= 0 || $_POST['vector-score'] > 10) {
             $right = false;
             $error = $error . "危害分数有误！<br>";
+        }else {
+            $vector_score = $_POST['vector-score'];
         }
-        $vector_score = $_POST['vector-score'];
         $target_rank = intval($_POST["target-rank"]);
         if ($target_rank == 0 || $target_rank < 100 || $target_rank > 500) {
             $right = false;
@@ -128,11 +129,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>白帽子安全技术挑战赛 | 提交漏洞</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
-      <!--<link rel="stylesheet" type="text/css" href="markitup/skins/markitup/style.css"/>
-      <link rel="stylesheet" type="text/css" href="markitup/sets/markdown/style.css">
-      <link rel="stylesheet" type="text/css" href="markitup/image_upload/image_upload.css">-->
-      <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-      <link href="bower_components/bootstrap-markdown-editor/dist/css/bootstrap-markdown-editor.css" rel="stylesheet">
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bower_components/bootstrap-markdown-editor/dist/css/bootstrap-markdown-editor.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -147,6 +145,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           border-radius: 8px;
           font-size: 16px;
           color: #999;
+      }
+      div.modal-backdrop {
+          z-index: -1;
       }
     </style>
   </head>
@@ -199,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="title" class="col-sm-2 control-label">漏洞标题</label>
           <div class="col-sm-9">
-              <input type="text" class="form-control" id="title" name="title"
+              <input type="text" class="form-control" id="title" name="title"  autocomplete="off"
                         placeholder="对漏洞的简要描述，可以简单描述漏洞的危害和成因，不要透漏漏洞的细节">
           </div>
         </div>
@@ -341,14 +342,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="username" class="col-sm-2 control-label">姓名</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="username" name="username" placeholder="">
+              <input type="text" class="form-control form-remember" id="username" name="username" placeholder="">
           </div>
         </div>
 
         <div class="form-group">
           <label for="gender" class="col-sm-2 control-label">性别</label>
           <div class="col-sm-3">
-              <select class="form-control" id="gender" name="gender">
+              <select class="form-control form-remember" id="gender" name="gender">
              <option value="1">男</option>
              <option value="2">女</option>
              <option value="3">保密</option>
@@ -359,14 +360,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="email" class="col-sm-2 control-label">邮箱</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="email" name="email" placeholder="*@mail.ustc.edu.cn">
+              <input type="text" class="form-control form-remember" id="email" name="email" placeholder="*@mail.ustc.edu.cn">
           </div>
         </div>
 
         <div class="form-group">
           <label for="phone" class="col-sm-2 control-label">手机</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="phone" name="phone" placeholder="">
+              <input type="text" class="form-control form-remember" id="phone" name="phone" placeholder="">
           </div>
         </div>
 
@@ -380,7 +381,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group" id="captcha-form">
           <label for="captcha" class="col-sm-2 control-label">验证码</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="captcha" name="captcha" placeholder="" onblur="check_captcha();">
+              <input type="text" autocomplete="off" class="form-control" id="captcha" name="captcha" placeholder="" onblur="check_captcha();">
           </div>
         </div>
 
@@ -443,10 +444,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <!-- Placed at the end of the document so the pages load faster -->
   <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
   -
-  <!--<script type="text/javascript" src="markitup/jquery.markitup.js"></script>
-  <script type="text/javascript" src="markitup/sets/markdown/set.js"></script>-->
   <script type="text/javascript" src="js/jquery.form.min.js"></script>
-  <!--<script type="text/javascript" src="markitup/image_upload/image_upload.js"></script>-->
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/cvss2.js"></script>
   <script type="text/javascript" src="js/bootstrap-typeahead.js"></script>
@@ -457,6 +455,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <script type="text/javascript" src="js/marked.min.js"></script>
 
 <script type="text/javascript">
+function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
 $(document).ready(function () {
     var editorsettings = {
         fontSize: '14px',
@@ -486,6 +490,23 @@ $(document).ready(function () {
           for (device in deviceScores) {
               $('#device').append('<option value="' + device + '">' + device + '</option>');
           }
+
+          $(".form-remember").each(function(){
+              var id = $(this).attr('id');
+              try {
+                  var enc = getCookie("remember" + id);
+                  $(this).val(decodeURIComponent(escape(window.atob(enc))));
+              } catch (err) {
+                  return;
+              }
+          });
+ 
+          $(".form-remember").change(function(){
+              var id = $(this).attr('id');
+              var enc = window.btoa(unescape(encodeURIComponent($(this).val())));
+              console.log(enc);
+              document.cookie = "remember" + id + "=" + enc;
+          });
       });
 
       function update_total_score() {
