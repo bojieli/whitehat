@@ -452,33 +452,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <script type="text/javascript" src="js/bootstrap-typeahead.js"></script>
   <script type="text/javascript" src="js/data.js"></script>
 
-  <script src="bower_components/ace-builds/src-min/ace.js"></script>
-  <script src="bower_components/bootstrap-markdown-editor/dist/js/bootstrap-markdown-editor.js"></script>
-  -
+  <script type="text/javascript" src="bower_components/ace-builds/src-min/ace.js"></script>
+  <script type="text/javascript" src="bower_components/bootstrap-markdown-editor/dist/js/bootstrap-markdown-editor.js"></script>
+  <script type="text/javascript" src="js/marked.min.js"></script>
+
   <script type="text/javascript">
       $(document).ready(function () {
           var editorsettings = {
+              fontSize: '14px',
               // Activate the preview:
               preview: true,
               imageUpload: true, // Activate the option
               uploadPath: 'upload.php',
               // This callback is called when the user click on the preview button:
               onPreview: function (content, callback) {
-
-
-                  // Example of implementation with ajax:
-                      $.ajax({
-                          url: 'preview.php',
-                          type: 'POST',
-                          dataType: 'html',
-                          data: {data: content}
-                      })
-                          .done(function (result) {
-                              // Return the html:
-                              callback(result);
-                          });
-
-              }
+                callback(marked(content));
+              },
+              fullscreen: false
           };
           //$('#detail').markItUp(mySettings);
           //$('#fix_method').markItUp(mySettings);
