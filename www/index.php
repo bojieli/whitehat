@@ -37,38 +37,38 @@
       <div>
         <h4>最新提交</h4>
         <table class="table table-striped table-bordered table-hover">
-			   	<thead>
-			      <tr>
-			        <th>提交时间</th>
-              <th>域名</th>
-			        <th>漏洞标题</th>
-			        <th>提交者</th>
-              <th>得分</th>
-			      </tr>
-			   	</thead>
-			   	<tbody>
+            <thead>
+                <tr>
+                <th>提交时间</th>
+                <th>域名</th>
+                <th>漏洞标题</th>
+                <th>提交者</th>
+                <th>得分</th>
+                </tr>
+            </thead>
+            <tbody>
 <?php
-	$r=$con->query("select submit_time,domain,score,title,username,anonymous from Loophole where verified=1 order by submit_time desc limit 0,5");
-  if($r->rowcount()==0){
+$r=$con->query("select submit_time,domain,score,title,username,anonymous from Loophole where verified=1 order by submit_time desc limit 0,5");
+if($r->rowcount()==0){
     echo '<tr><td colspan="5">暂无数据</td></tr>';
-  }
-	while($row=$r->fetch()) {
-		echo '<tr>';
-		echo '<td>'.$row['submit_time'].'</td>';
+}
+while($row=$r->fetch()) {
+    echo '<tr>';
+    echo '<td>'.$row['submit_time'].'</td>';
     echo '<td>'.$row['domain'].'</td>';
-		echo '<td>'.$row['title'].'</td>';
-		if($row['anonymous']){
-			$name="<i>匿名</i>";
-		}else{
-			$name=$row['username'];
-		}
-		echo '<td>'.$name.'</td>';
+    echo '<td>'.$row['title'].'</td>';
+    if($row['anonymous']){
+        $name="<i>匿名</i>";
+    }else{
+        $name=$row['username'];
+    }
+    echo '<td>'.$name.'</td>';
     echo '<td>'.$row['score'].'</td>';
-		echo '</tr>';
-	}
+    echo '</tr>';
+}
 ?>
-			  	</tbody>
-				</table>
+            </tbody>
+        </table>
       </div>
 
       <?php require("footer.php");?>

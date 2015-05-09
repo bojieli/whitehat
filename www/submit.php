@@ -76,42 +76,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             try {
                 $query = $con->prepare("INSERT INTO Loophole (domain_type,domain,vector,target_rank,score,title,detail,fix_method,username,gender,email,phone,anonymous,submit_time)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 $query->execute(array(
-                  htmlspecialchars($_POST["type"]),
-                  htmlspecialchars($domain),
-                  htmlspecialchars($_POST["vector"]),
-                  intval($_POST["target-rank"]),
-                  $total_score,
-                  htmlspecialchars($_POST["title"]),
-                  htmlspecialchars($_POST["detail"]),
-                  htmlspecialchars($_POST["fix_method"]),
-                  htmlspecialchars($_POST["username"]),
-                  htmlspecialchars($_POST["gender"]),
-                  htmlspecialchars($_POST["email"]),
-                  htmlspecialchars($_POST["phone"]),
-									isset($_POST["anonymous"])?1:0,
-									date('Y-m-d H:i:s', time())));
+                    htmlspecialchars($_POST["type"]),
+                    htmlspecialchars($domain),
+                    htmlspecialchars($_POST["vector"]),
+                    intval($_POST["target-rank"]),
+                    $total_score,
+                    htmlspecialchars($_POST["title"]),
+                    htmlspecialchars($_POST["detail"]),
+                    htmlspecialchars($_POST["fix_method"]),
+                    htmlspecialchars($_POST["username"]),
+                    htmlspecialchars($_POST["gender"]),
+                    htmlspecialchars($_POST["email"]),
+                    htmlspecialchars($_POST["phone"]),
+                    isset($_POST["anonymous"])?1:0,
+                    date('Y-m-d H:i:s', time())));
             } catch (PDOException $e) {
                 echo "Database Error: cannot Insert!: " . $e->getMessage();
                 exit();
             }
             sendmail($_POST['email'], $_POST['username'],
-              "[漏洞] ".htmlspecialchars($_POST["title"]),
+                "[漏洞] ".htmlspecialchars($_POST["title"]),
 
-              "<b>靶标:</b> ".htmlspecialchars($_POST["domain"])." ($target_rank 分)<br><br>".
-              "<b>标题:</b> ".htmlspecialchars($_POST["title"])."<br><br>".
-              "<b>危害向量:</b> ".htmlspecialchars($_POST["vector"])."<br><br>".
-              "<b>得分: $total_score</b> = $target_rank * $vector_score<br><br>".
-              "<b>详细说明:</b> ".htmlspecialchars($_POST["detail"])."<br><br>".
-              "<b>修复方法:</b> ".htmlspecialchars($_POST["fix_method"])."<br><br>".
-              "<b>姓名:</b> ".htmlspecialchars($_POST["username"])."<br><br>".
-              "<b>性别:</b> ".($_POST["gender"]=="1"?"男":($_POST["gender"]=="2"?"女":"保密"))."<br><br>".
-              "<b>邮箱:</b> ".htmlspecialchars($_POST["email"])."<br><br>".
-              "<b>手机:</b> ".htmlspecialchars($_POST["phone"])."<br><br>".
-              "<b>匿名:</b> ".(isset($_POST["anonymous"])?"是":"否")
-              );
+                "<b>靶标:</b> ".htmlspecialchars($_POST["domain"])." ($target_rank 分)<br><br>".
+                "<b>标题:</b> ".htmlspecialchars($_POST["title"])."<br><br>".
+                "<b>危害向量:</b> ".htmlspecialchars($_POST["vector"])."<br><br>".
+                "<b>得分: $total_score</b> = $target_rank * $vector_score<br><br>".
+                "<b>详细说明:</b> ".htmlspecialchars($_POST["detail"])."<br><br>".
+                "<b>修复方法:</b> ".htmlspecialchars($_POST["fix_method"])."<br><br>".
+                "<b>姓名:</b> ".htmlspecialchars($_POST["username"])."<br><br>".
+                "<b>性别:</b> ".($_POST["gender"]=="1"?"男":($_POST["gender"]=="2"?"女":"保密"))."<br><br>".
+                "<b>邮箱:</b> ".htmlspecialchars($_POST["email"])."<br><br>".
+                "<b>手机:</b> ".htmlspecialchars($_POST["phone"])."<br><br>".
+                "<b>匿名:</b> ".(isset($_POST["anonymous"])?"是":"否")
+            );
             echo '<meta charset="utf-8"><script>alert("提交成功！请查收邮件，审核结果我们将邮件通知。");</script><meta http-equiv="refresh" content="0;url=/">';
         } else {
-          echo $error;
+            echo $error;
         }
         exit();
     }
@@ -312,7 +312,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="hidden" id="vector" name="vector" value="AV:L/AC:H/Au:M/C:N/I:N/A:N">
           </div>
         </div>
- 
+
         <div class="form-group">
           <label for="detail" class="col-sm-2 control-label">详细说明</label>
           <div class="col-sm-9">
@@ -430,7 +430,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div class="modal-body" id="error-message">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" 
+            <button type="button" class="btn btn-default"
               data-dismiss="modal">确定
             </button>
           </div>
@@ -456,19 +456,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <script type="text/javascript" src="bower_components/bootstrap-markdown-editor/dist/js/bootstrap-markdown-editor.js"></script>
   <script type="text/javascript" src="js/marked.min.js"></script>
 
-  <script type="text/javascript">
-      $(document).ready(function () {
-          var editorsettings = {
-              fontSize: '14px',
-              // Activate the preview:
-              preview: true,
-              imageUpload: true, // Activate the option
-              uploadPath: 'upload.php',
-              // This callback is called when the user click on the preview button:
-              onPreview: function (content, callback) {
+<script type="text/javascript">
+$(document).ready(function () {
+    var editorsettings = {
+        fontSize: '14px',
+            // Activate the preview:
+            preview: true,
+            imageUpload: true, // Activate the option
+            uploadPath: 'upload.php',
+            // This callback is called when the user click on the preview button:
+            onPreview: function (content, callback) {
                 callback(marked(content));
               },
-              fullscreen: false
+                  fullscreen: false
           };
           //$('#detail').markItUp(mySettings);
           //$('#fix_method').markItUp(mySettings);
@@ -480,8 +480,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           }
           $('#domain').typeahead({
               source: domainList,
-              minLength: 2,
-              items: 10
+                  minLength: 2,
+                  items: 10
           });
           for (device in deviceScores) {
               $('#device').append('<option value="' + device + '">' + device + '</option>');
@@ -529,90 +529,90 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       //前端验证表单
 
       $("#submit").on('click',function(event){
-        var err=0,msg="";
+          var err=0,msg="";
           $("#detail").val($('#detail-edit').markdownEditor('content'));
           $("#fix_method").val($('#fix_method-edit').markdownEditor('content'));
-        switch ($("#type").val()) {
-        case '1':
-            if($("#domain").val().length<=12||$("#domain").val().substr(-12,12)!=".ustc.edu.cn"){
-              err=1;
-              msg+="请输入以 .ustc.edu.cn 结尾的域名！<br>";
+          switch ($("#type").val()) {
+          case '1':
+              if($("#domain").val().length<=12||$("#domain").val().substr(-12,12)!=".ustc.edu.cn"){
+                  err=1;
+                  msg+="请输入以 .ustc.edu.cn 结尾的域名！<br>";
             }
             break;
-        case '2':
-            break;
-        case '3':
-            if ($("#app").val().trim() == "") {
-                err=1;
-                msg+="请输入应用名称！<br>";
+case '2':
+    break;
+case '3':
+    if ($("#app").val().trim() == "") {
+        err=1;
+        msg+="请输入应用名称！<br>";
             }
             break;
         }
 
         if($("#vector").val() == ""){
-          err=1;
-          msg+="请选择漏洞危害！<br>";
+            err=1;
+            msg+="请选择漏洞危害！<br>";
         }
         if($("#total-score").text()==0){
-          err=1;
-          msg+="有危害的才叫漏洞，请选择漏洞危害！<br>";
+            err=1;
+            msg+="有危害的才叫漏洞，请选择漏洞危害！<br>";
         }
 
         $("#input-target-rank").val($("#target-rank").text());
         $("#vector-score").val($("#score").text());
 
         if($("#title").val()==""){
-          err=1;
-          msg+="漏洞标题不能为空！<br>";
+            err=1;
+            msg+="漏洞标题不能为空！<br>";
         }
         if($("#detail").val()==""){
-          err=1;
-          msg+="详细说明不能为空！<br>";
+            err=1;
+            msg+="详细说明不能为空！<br>";
         }
         if($("#fix_method").val()==""){
-          err=1;
-          msg+="漏洞修复不能为空！<br>";
+            err=1;
+            msg+="漏洞修复不能为空！<br>";
         }
         if($("#username").val()==""){
-          err=1;
-          msg+="姓名不能为空！<br>";
+            err=1;
+            msg+="姓名不能为空！<br>";
         }
         if($("#email").val().length<=17||$("#email").val().substr(-17,17)!="@mail.ustc.edu.cn"){
-          err=1;
-          msg+="邮箱必须以@mail.ustc.edu.cn结尾！<br>";
+            err=1;
+            msg+="邮箱必须以@mail.ustc.edu.cn结尾！<br>";
         }
         if($("#phone").val().length!=11||isNaN($("#phone").val())){
-          err=1;
-          msg+="手机必须为11位数字！<br>";
+            err=1;
+            msg+="手机必须为11位数字！<br>";
         }
         if(!($("#agree")[0].checked)){
-          err=1;
-          msg+="提交前需勾选同意比赛条款！<br>";
+            err=1;
+            msg+="提交前需勾选同意比赛条款！<br>";
         }
         if(!captcha_ok){
-          err=1;
-          msg+="验证码有误！<br>";
+            err=1;
+            msg+="验证码有误！<br>";
         }
 
         if(err==1){
-          $("#error-message").html(msg);
-          $("#modal-error").modal('show');
-          return false;
+            $("#error-message").html(msg);
+            $("#modal-error").modal('show');
+            return false;
         }
       });
 
       //ajax验证码
       var captcha_ok=0;
       function check_captcha(){
-        $.post("captcha/check.php",{captcha:$("#captcha").val()},function(data,status){
-          if(status=="success"){
-            if(data=="0"){//验证码错误
-              $("#captcha-form").addClass("has-error");
-              $("#captcha-pic")[0].src='captcha/captcha.php?'+Math.random();
-              captcha_ok=0;
+          $.post("captcha/check.php",{captcha:$("#captcha").val()},function(data,status){
+              if(status=="success"){
+                  if(data=="0"){//验证码错误
+                      $("#captcha-form").addClass("has-error");
+                      $("#captcha-pic")[0].src='captcha/captcha.php?'+Math.random();
+                      captcha_ok=0;
             }else{//正确
-              $("#captcha-form").removeClass("has-error");
-              captcha_ok=1;
+                $("#captcha-form").removeClass("has-error");
+                captcha_ok=1;
             }
           }
         });
