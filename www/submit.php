@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   htmlspecialchars($_POST["gender"]),
                   htmlspecialchars($_POST["email"]),
                   htmlspecialchars($_POST["phone"]),
-                  isset($_POST["anonymous"])));
+                  isset($_POST["anonymous"])?1:0));
             } catch (PDOException $e) {
                 echo "Database Error: cannot Insert!: " . $e->getMessage();
                 exit();
