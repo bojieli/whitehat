@@ -200,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="title" class="col-sm-2 control-label">漏洞标题</label>
           <div class="col-sm-9">
-              <input type="text" class="form-control" id="title" name="title"
+              <input type="text" class="form-control" id="title" name="title"  autocomplete="off"
                         placeholder="对漏洞的简要描述，可以简单描述漏洞的危害和成因，不要透漏漏洞的细节">
           </div>
         </div>
