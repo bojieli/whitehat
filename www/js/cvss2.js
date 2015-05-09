@@ -540,12 +540,13 @@ $(document).ready(function() {
     $("#re-ar-nd").tooltip();
 
     // Processing URI parameters --if some
-    if (! window.location.search) {
+    if (! $('#vector')) {
         reset();  // No parameters
     } else {
-        parser(window.location.search.replace(/^\?v=/, ""));
+        parser($('#vector').val());
         $("#score").text(calc());
         $("#vector").val(gen_vector());
+        update_total_score();
         set_radios(0);
         set_radios(1);
         set_radios(2);
