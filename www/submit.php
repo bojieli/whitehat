@@ -128,7 +128,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>白帽子安全技术挑战赛 | 提交漏洞</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="css/style.css" rel="stylesheet"/>
       <!--<link rel="stylesheet" type="text/css" href="markitup/skins/markitup/style.css"/>
       <link rel="stylesheet" type="text/css" href="markitup/sets/markdown/style.css">
       <link rel="stylesheet" type="text/css" href="markitup/image_upload/image_upload.css">-->
