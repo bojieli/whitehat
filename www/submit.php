@@ -339,14 +339,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="username" class="col-sm-2 control-label">姓名</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="username" name="username" placeholder="">
+              <input type="text" class="form-control form-remember" id="username" name="username" placeholder="">
           </div>
         </div>
 
         <div class="form-group">
           <label for="gender" class="col-sm-2 control-label">性别</label>
           <div class="col-sm-3">
-              <select class="form-control" id="gender" name="gender">
+              <select class="form-control form-remember" id="gender" name="gender">
              <option value="1">男</option>
              <option value="2">女</option>
              <option value="3">保密</option>
@@ -357,14 +357,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
           <label for="email" class="col-sm-2 control-label">邮箱</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="email" name="email" placeholder="*@mail.ustc.edu.cn">
+              <input type="text" class="form-control form-remember" id="email" name="email" placeholder="*@mail.ustc.edu.cn">
           </div>
         </div>
 
         <div class="form-group">
           <label for="phone" class="col-sm-2 control-label">手机</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="phone" name="phone" placeholder="">
+              <input type="text" class="form-control form-remember" id="phone" name="phone" placeholder="">
           </div>
         </div>
 
@@ -378,7 +378,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group" id="captcha-form">
           <label for="captcha" class="col-sm-2 control-label">验证码</label>
           <div class="col-sm-3">
-              <input type="text" class="form-control" id="captcha" name="captcha" placeholder="" onblur="check_captcha();">
+              <input type="text" autocomplete="off" class="form-control" id="captcha" name="captcha" placeholder="" onblur="check_captcha();">
           </div>
         </div>
 
@@ -452,6 +452,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <script type="text/javascript" src="js/marked.min.js"></script>
 
 <script type="text/javascript">
+function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
 $(document).ready(function () {
     var editorsettings = {
         fontSize: '14px',
@@ -481,6 +487,23 @@ $(document).ready(function () {
           for (device in deviceScores) {
               $('#device').append('<option value="' + device + '">' + device + '</option>');
           }
+
+          $(".form-remember").each(function(){
+              var id = $(this).attr('id');
+              try {
+                  var enc = getCookie("remember" + id);
+                  $(this).val(decodeURIComponent(escape(window.atob(enc))));
+              } catch (err) {
+                  return;
+              }
+          });
+ 
+          $(".form-remember").change(function(){
+              var id = $(this).attr('id');
+              var enc = window.btoa(unescape(encodeURIComponent($(this).val())));
+              console.log(enc);
+              document.cookie = "remember" + id + "=" + enc;
+          });
       });
 
       function update_total_score() {

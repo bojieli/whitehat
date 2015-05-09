@@ -20,7 +20,7 @@ function sendmail($email,$username,$subject,$body){
 
     $mail->AddAddress($email, $username);
 
-    $address = "staff@lug.ustc.edu.cn";
+    $address = "whitehat@ustclug.org";
     $mail->AddAddress($address, "staff");
 
     //$mail->AddAttachment('xx.xls','我的附件.xls');
