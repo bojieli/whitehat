@@ -178,9 +178,9 @@
 <li>没有列出在上述列表中，又没有 *.ustc.edu.cn 域名的网站</li>
 </ul>
 
+    <?php require("footer.php");?>
     </div>
 
-    <?php require("footer.php");?>
   </body>
   <!-- Bootstrap core JavaScript -->
   <!-- Placed at the end of the document so the pages load faster -->
