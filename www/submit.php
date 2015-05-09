@@ -520,9 +520,9 @@ $(document).ready(function () {
       $("#type").on('change', function(event){
           $(".target").hide();
           switch ($("#type").val()) {
-          case '1': $("#domain-target").show(); break;
-          case '2': $("#device-target").show(); break;
-          case '3': $("#app-target").show(); break;
+          case '1': $("#domain-target").show(); $("#domain").change(); break;
+          case '2': $("#device-target").show(); $("#device").change(); break;
+          case '3': $("#app-target").show(); $("#app").change(); break;
           }
       });
 
