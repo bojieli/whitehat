@@ -16,6 +16,13 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
+
+CREATE USER 'root'@'%' IDENTIFIED BY 'whitehat';
+GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;
+CREATE DATABASE IF NOT EXISTS whitehat;
+FLUSH PRIVILEGES;
+
+USE whitehat;
 --
 -- Database: `whitehat`
 --
