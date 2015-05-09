@@ -213,11 +213,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="需要攻击者拥有受攻击系统的物理访问权限或者本地(shell)账号" id="rb-av-l">
                         <input type="radio" name="rb-av" value="r000">本地
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="需要攻击者拥有受攻击系统的广播域或冲突域访问权限" id="rb-av-a">
-                        <input type="radio" name="rb-av" value="r001">邻近网络
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="需要攻击者拥有校内网络的访问权限" id="rb-av-a">
+                        <input type="radio" name="rb-av" value="r001">校内
                     </label>
-                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="受攻击系统在远程网络上，攻击者不需要受攻击系统的本地访问权限和本地网络权限" id="rb-av-n">
-                        <input type="radio" name="rb-av" value="r002">远程
+                    <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="受攻击系统 Internet 上" id="rb-av-n">
+                        <input type="radio" name="rb-av" value="r002">Internet
                     </label>
                 </div>
             </div>
@@ -238,7 +238,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div>
-                <label for="base-au" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the number of times an attacker must authenticate to a target in order to exploit a vulnerability. The fewer authentication instances that are required, the higher the vulnerability score." data-title="Authentication" id="base-au">认证</span></label>
+                <label for="base-au" class="control-label"><span class="label label-primary" data-container="body" data-toggle="popover" data-placement="right" data-content="This metric measures the number of times an attacker must authenticate to a target in order to exploit a vulnerability. The fewer authentication instances that are required, the higher the vulnerability score." data-title="Authentication" id="base-au">攻击者认证</span></label>
                 <div class="btn-group btn-group-sm" data-toggle="buttons">
                     <label class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="攻击者需要验证两次以上，即使每次都使用相同的账号。" id="rb-au-m">
                         <input type="radio" name="rb-au" value="r020">多次认证
