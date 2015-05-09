@@ -21,6 +21,9 @@ CREATE TABLE IF NOT EXISTS `Loophole` (
   `token` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `official_reply` text COLLATE utf8_bin,
   `note` text COLLATE utf8_bin,
-   `verified` tinyint(1) DEFAULT 0
+  `review_msg` text COLLATE utf8_bin,
+  `review_time` datetime DEFAULT NULL,
+  `reviewer` varchar(80) collate utf8_bin,
+  `verified` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
