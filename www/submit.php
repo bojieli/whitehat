@@ -447,7 +447,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <!-- Bootstrap core JavaScript -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
-  -
   <script type="text/javascript" src="js/jquery.form.min.js"></script>
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/cvss2.js"></script>
