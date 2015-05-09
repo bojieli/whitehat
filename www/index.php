@@ -35,6 +35,47 @@
       </div>
 
       <div>
+        <h4>白帽子排行榜</h4>
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                <th>排名</th>
+                <th>提交者</th>
+                <th>漏洞数量</th>
+                <th>总得分</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+$r=$con->query("select e.email, e.total_score, e.cnt, l.username, l.anonymous from (select email, sum(score) as total_score, count(*) as cnt from Loophole where verified=1 group by email order by total_score desc, cnt desc) e left join Loophole l on e.email=l.email and l.verified=1 left join Loophole l1 on l.email=l1.email and l1.verified=1 and l.id<l1.id where l1.id is null order by total_score desc, cnt desc");
+if($r->rowcount()==0){
+    echo '<tr><td colspan="4">暂无数据</td></tr>';
+}
+$rcnt=$rrank=1;
+$rlastscore=$rlastcnt=0;
+while($row=$r->fetch()) {
+    echo '<tr>';
+    if($row['total_score']!=$rlastscore||$row['cnt']!=$rlastcnt)$rrank=$rcnt;
+    echo '<td>'.$rrank.'</td>';
+    $rcnt++;
+    $rlastscore=$row['total_score'];
+    $rlastcnt=$row['cnt'];
+    if($row['anonymous']){
+        $name="<i>匿名</i>";
+    }else{
+        $name=$row['username'];
+    }
+    echo '<td>'.$name.'</td>';
+    echo '<td>'.$row['cnt'].'</td>';
+    echo '<td>'.$row['total_score'].'</td>';
+    echo '</tr>';
+}
+?>
+            </tbody>
+        </table>
+      </div>
+
+      <div>
         <h4>最新提交</h4>
         <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -48,7 +89,7 @@
             </thead>
             <tbody>
 <?php
-$r=$con->query("select submit_time,domain,score,title,username,anonymous from Loophole where verified=1 order by submit_time desc limit 0,5");
+$r=$con->query("select submit_time,domain,score,title,username,anonymous from Loophole where verified=1 order by submit_time desc");
 if($r->rowcount()==0){
     echo '<tr><td colspan="5">暂无数据</td></tr>';
 }
