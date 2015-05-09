@@ -14,7 +14,7 @@ if (is_array($_FILES) && count($_FILES)) {
             $filename = $file['name'];
             $filetype = pathinfo($filename, PATHINFO_EXTENSION);
             $filename = (string)md5($filename . time() . (string)rand()) . "." . $filetype;
-            if (strpos($filename, '.php') !== false) $filename .= '.txt'; // diffuse PHP files
+            if ($filetype == "php") $filename .= '.txt'; // diffuse PHP files
             $target = $file_path . DIRECTORY_SEPARATOR . $filename;
             if (file_exists($target)) {
                 $filename = time() . '-' . $filename;
