@@ -20,9 +20,6 @@
     h1,h2,h3{
       font-weight: bold;
     }
-    p{
-      text-indent:2em;
-    }
     </style>
   </head>
 
