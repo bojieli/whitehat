@@ -95,14 +95,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     htmlspecialchars($_POST["phone"]),
                     isset($_POST["anonymous"])?1:0,
                     date('Y-m-d H:i:s', time())));
+
+                $id = $con->lastInsertId();
             } catch (PDOException $e) {
                 echo "Database Error: cannot Insert!: " . $e->getMessage();
                 exit();
             }
-            sendmail($_POST['email'], $_POST['username'],
-                "[漏洞] ".htmlspecialchars($_POST["title"]),
+            if (!$id) {
+                echo "Database insert error!";
+                exit();
+            }
 
-                "<b>靶标:</b> ".htmlspecialchars($_POST["domain"])." ($target_rank 分)<br><br>".
+            $mail_title = 
+                "[漏洞报告] ".htmlspecialchars($_POST["title"]);
+            $mail_content = 
+                "<b>漏洞ID: $id</b><br><br>".
+                "<b>靶标:</b> ".htmlspecialchars($domain)." ($target_rank 分)<br><br>".
                 "<b>标题:</b> ".htmlspecialchars($_POST["title"])."<br><br>".
                 "<b>危害向量:</b> ".htmlspecialchars($_POST["vector"])."<br><br>".
                 "<b>得分: $total_score</b> = $target_rank * $vector_score<br><br>".
@@ -112,8 +120,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 "<b>性别:</b> ".($_POST["gender"]=="1"?"男":($_POST["gender"]=="2"?"女":"保密"))."<br><br>".
                 "<b>邮箱:</b> ".htmlspecialchars($_POST["email"])."<br><br>".
                 "<b>手机:</b> ".htmlspecialchars($_POST["phone"])."<br><br>".
-                "<b>匿名:</b> ".(isset($_POST["anonymous"])?"是":"否")
-            );
+                "<b>匿名:</b> ".(isset($_POST["anonymous"])?"是":"否")."<br><br>".
+                "您提交的漏洞将于 24 小时内被审核并邮件通知您。如有任何问题，请回复本邮件联系我们。";
+
+            sendmail($_POST['email'], $_POST['username'], $mail_title, $mail_content);
+            sendmail('whitehat@ustclug.org', 'staff', $mail_title,
+                $mail_content."<br><br><br><br>".
+                "<b>管理员审核:</b> <a href=\"https://wh.ustclug.org/review.php?id=$id\">https://wh.ustclug.org/review.php?id=$id</a><br><br>");
+
             echo '<meta charset="utf-8"><script>alert("提交成功！请查收邮件，审核结果我们将邮件通知。");</script><meta http-equiv="refresh" content="0;url=/">';
         } else {
             echo $error;
