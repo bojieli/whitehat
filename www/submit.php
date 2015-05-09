@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($right) {
             $total_score = round($vector_score * $target_rank);
             try {
-                $query = $con->prepare("INSERT INTO Loophole (domain_type,domain,vector,target_rank,score,title,detail,fix_method,username,gender,email,phone,anonymous,submit_time)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())");
+                $query = $con->prepare("INSERT INTO Loophole (domain_type,domain,vector,target_rank,score,title,detail,fix_method,username,gender,email,phone,anonymous,submit_time)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 $query->execute(array(
                   htmlspecialchars($_POST["type"]),
                   htmlspecialchars($domain),
@@ -88,7 +88,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   htmlspecialchars($_POST["gender"]),
                   htmlspecialchars($_POST["email"]),
                   htmlspecialchars($_POST["phone"]),
-                  isset($_POST["anonymous"])?1:0));
+									isset($_POST["anonymous"])?1:0,
+									date('Y-m-d H:i:s', time())));
             } catch (PDOException $e) {
                 echo "Database Error: cannot Insert!: " . $e->getMessage();
                 exit();

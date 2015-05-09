@@ -6,3 +6,4 @@
  * Time: 9:17 PM
  */
 require_once("connect.php");
+date_default_timezone_set('Asia/Shanghai');

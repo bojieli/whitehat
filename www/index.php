@@ -10,7 +10,6 @@
     <title>白帽子安全技术挑战赛</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="css/style.css" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -49,7 +48,7 @@
 			   	</thead>
 			   	<tbody>
 <?php
-	$r=$con->query("select submit_time,domain,score,title,username,anonymous from Loophole where rank>0 order by submit_time desc limit 0,5");
+	$r=$con->query("select submit_time,domain,score,title,username,anonymous from Loophole where verified=1 order by submit_time desc limit 0,5");
   if($r->rowcount()==0){
     echo '<tr><td colspan="5">暂无数据</td></tr>';
   }
