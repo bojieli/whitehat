@@ -74,16 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($right) {
             $total_score = round($vector_score * $target_rank);
             try {
-                $query = $con->prepare("UPDATE Loophole SET domain_type=?, domain=?, vector=?, target_rank=?, score=?, title=?, detail=?, fix_method=?, reviewer=?, verified=?, review_msg=?, review_time=? WHERE id=?");
+                $query = $con->prepare("UPDATE Loophole SET vector=?, target_rank=?, score=?, reviewer=?, verified=?, review_msg=?, review_time=? WHERE id=?");
                 $query->execute(array(
-                    htmlspecialchars($_POST["type"]),
-                    htmlspecialchars($domain),
                     htmlspecialchars($_POST["vector"]),
                     intval($_POST["target-rank"]),
                     $total_score,
-                    htmlspecialchars($_POST["title"]),
-                    htmlspecialchars($_POST["detail"]),
-                    htmlspecialchars($_POST["fix_method"]),
                     htmlspecialchars($_POST["reviewer"]),
                     intval($_POST["review_status"]),
                     htmlspecialchars($_POST["review_msg"]),
@@ -175,6 +170,10 @@ else {
       div.modal-backdrop {
         z-index: -1;
       }
+
+      #detail-edit textarea, #fix_method-edit textarea {
+          display: none;
+      }
     </style>
   </head>
 
@@ -204,7 +203,7 @@ else {
         <div class="form-group">
           <label for="type" class="col-sm-2 control-label">靶标类型</label>
           <div class="col-sm-3">
-            <select name="type" id="type" class="form-control">
+            <select name="type" id="type" class="form-control" disabled>
                 <option value="1" <?php if($row['domain_type']==1) echo 'selected' ?>>网站</option>
                 <option value="2" <?php if($row['domain_type']==2) echo 'selected' ?>>设备</option>
                 <option value="3" <?php if($row['domain_type']==3) echo 'selected' ?>>应用</option>
@@ -215,14 +214,14 @@ else {
         <div class="form-group target" id="domain-target">
           <label for="domain" class="col-sm-2 control-label">靶标域名</label>
           <div class="col-sm-3">
-            <input type="text" class="form-control" id="domain" name="domain" placeholder="*.ustc.edu.cn" autocomplete="off" value="<?=$row['domain']?>">
+            <input disabled type="text" class="form-control" id="domain" name="domain" placeholder="*.ustc.edu.cn" autocomplete="off" value="<?=$row['domain']?>">
           </div>
         </div>
 
         <div class="form-group target" id="device-target" style="display:none">
           <label for="domain" class="col-sm-2 control-label">设备名称</label>
           <div class="col-sm-3">
-              <select name="device" id="device" class="form-control" id="device" name="device" autocomplete="off">
+              <select disabled name="device" id="device" class="form-control" id="device" name="device" autocomplete="off">
               </select>
           </div>
         </div>
@@ -230,14 +229,14 @@ else {
         <div class="form-group target" id="app-target" style="display:none">
           <label for="domain" class="col-sm-2 control-label">应用名称</label>
           <div class="col-sm-3">
-            <input type="text" class="form-control" id="app" name="app" autocomplete="off" value="<?=$row['domain']?>">
+            <input disabled type="text" class="form-control" id="app" name="app" autocomplete="off" value="<?=$row['domain']?>">
           </div>
         </div>
 
         <div class="form-group">
           <label for="title" class="col-sm-2 control-label">漏洞标题</label>
           <div class="col-sm-9">
-              <input type="text" class="form-control" id="title" name="title"
+              <input disabled type="text" class="form-control" id="title" name="title"
                 placeholder="对漏洞的简要描述，可以简单描述漏洞的危害和成因，不要透漏漏洞的细节" value="<?=$row['title']?>">
           </div>
         </div>
