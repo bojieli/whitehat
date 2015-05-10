@@ -11,42 +11,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $right = false;
             $error = $error . "需要漏洞 ID！<br>";
         }
-        if (!(isset($_POST["type"]))) {
-            $right = false;
-            $error = $error . "请输入漏洞类型！<br>";
-        } else {
-            $type = intval($_POST["type"]);
-            switch ($type) {
-            case 1:
-                $domain = $_POST["domain"];
-                break;
-            case 2:
-                $domain = $_POST["device"];
-                break;
-            case 3:
-                $domain = $_POST["app"];
-                break;
-            default:
-                $right = false;
-                $error = $error . "未知漏洞类型！<br>";
-            }
-        }
-        if ($domain == "") {
-            $right = false;
-            $error = $error . "请输入漏洞靶标！<br>";
-        }
-        if (!(isset($_POST["title"]) && ($_POST["title"] != ""))) {
-            $right = false;
-            $error = $error . "请输入漏洞标题！<br>";
-        }
-        if (!(isset($_POST["detail"]) && ($_POST["detail"] != ""))) {
-            $right = false;
-            $error = $error . "请输入详细说明！<br>";
-        }
-        if (!(isset($_POST["fix_method"]) && ($_POST["fix_method"] != ""))) {
-            $right = false;
-            $error = $error . "请输入漏洞修复方法！<br>";
-        }
         if (!(isset($_POST["review_status"])) || $_POST["review_status"] == 0) {
             $right = false;
             $error = $error . "请输入评审结果！<br>";
