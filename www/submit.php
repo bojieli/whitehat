@@ -106,9 +106,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit();
             }
 
-            $mail_title = 
+            $mail_title =
                 "[漏洞报告] ".htmlspecialchars($_POST["title"]);
-            $mail_content = 
+            $mail_content =
                 "<b>漏洞ID: $id</b><br><br>".
                 "<b>靶标:</b> ".htmlspecialchars($domain)." ($target_rank 分)<br><br>".
                 "<b>标题:</b> ".htmlspecialchars($_POST["title"])."<br><br>".
@@ -479,6 +479,7 @@ function getCookie(name) {
 }
 
 $(document).ready(function () {
+    marked.setOptions({sanitize:true});
     var editorsettings = {
         fontSize: '14px',
             // Activate the preview:

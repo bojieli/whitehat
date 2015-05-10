@@ -504,6 +504,7 @@ else {
 
     <script type="text/javascript">
     $(document).ready(function () {
+        marked.setOptions({sanitize:true});
         var editorsettings = {
             fontSize: '14px',
                 // Activate the preview:
