@@ -53,25 +53,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "Database Error: cannot Insert!: " . $e->getMessage();
                 exit();
             }
+
+            try {
+                $query = $con->prepare("SELECT * FROM Loophole WHERE id=?");
+                $query->execute(array(intval($_POST["id"])));
+                $row = $query->fetch();
+            } catch (PDOException $e) {
+                echo "Database Error: cannot Select!: " . $e->getMessage();
+                exit();
+            }
+
             $mail_title =
                 ($_POST['review_status'] == 1 ? "[审核通过] ":"[审核未通过] ").
-                htmlspecialchars($_POST["title"]);
+                htmlspecialchars($row["title"]);
 
             $mail_content =
                 ($_POST['review_status'] == 1 ?
                 "恭喜您在白帽子安全技术挑战赛中提交的漏洞已被审核通过，获得 $total_score 分！<br><br>" :
                 "很遗憾，您在白帽子安全技术挑战赛中提交的漏洞未被审核通过。原因是：".htmlspecialchars($_POST["review_msg"])."<br><br>").
                 "<b>漏洞ID:</b> ".htmlspecialchars($_POST["id"])."<br><br>".
-                "<b>靶标:</b> ".htmlspecialchars($domain)." ($target_rank 分)<br><br>".
-                "<b>标题:</b> ".htmlspecialchars($_POST["title"])."<br><br>".
+                "<b>靶标:</b> ".htmlspecialchars($row["domain"])." ($target_rank 分)<br><br>".
+                "<b>标题:</b> ".htmlspecialchars($row["title"])."<br><br>".
                 "<b>危害向量:</b> ".htmlspecialchars($_POST["vector"])."<br><br>".
                 "<b>得分: $total_score</b> = $target_rank * $vector_score<br><br>".
                 "<b>审核意见:</b> ".htmlspecialchars($_POST["review_msg"])."<br><br>".
-                "<b>详细说明:</b> ".htmlspecialchars($_POST["detail"])."<br><br>".
-                "<b>修复方法:</b> ".htmlspecialchars($_POST["fix_method"])."<br><br>".
+                "<b>详细说明:</b> ".htmlspecialchars($row["detail"])."<br><br>".
+                "<b>修复方法:</b> ".htmlspecialchars($row["fix_method"])."<br><br>".
                 "如果您对审核结果有任何疑问，请回复本邮件联系我们。";
 
-            sendmail($_POST['email'], $_POST['username'], $mail_title, $mail_content);
+            echo $mail_content;
+            sendmail($row['email'], $row['username'], $mail_title, $mail_content);
             sendmail('whitehat@ustclug.org', 'staff', $mail_title, $mail_content);
 
             echo '<meta charset="utf-8"><script>alert("提交成功！");</script><meta http-equiv="refresh" content="0;url=/">';
