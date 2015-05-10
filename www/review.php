@@ -497,8 +497,8 @@ else {
   <script type="text/javascript" src="js/bootstrap-typeahead.js"></script>
   <script type="text/javascript" src="js/data.js"></script>
 
-  <script type="text/javascript" src="bower_components/ace-builds/src-min/ace.js"></script>
-  <script type="text/javascript" src="bower_components/bootstrap-markdown-editor/dist/js/bootstrap-markdown-editor.js"></script>
+  <script type="text/javascript" src="js/ace.js"></script>
+  <script type="text/javascript" src="js/bootstrap-markdown-editor.js"></script>
   <script type="text/javascript" src="js/marked.min.js"></script>
 
     <script type="text/javascript">
