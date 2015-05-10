@@ -94,12 +94,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 else {
     if (!is_numeric($_GET['id'])) {
-        $unverified_query = $con-query("SELECT id FROM Loophole WHERE verified=0");
+        $unverified_query = $con->query("SELECT id FROM Loophole WHERE verified=0");
         if($unverified_query->rowcount()==0){
             echo "No unverified left.";
         }
         else {
-            echo "<h1>Unverified list</h1>"
+            echo "<h1>Unverified list</h1>";
             echo '<ul>';
             while($row=$unverified_query->fetch()){
                 echo '<li><a href="/review.php?id=' . $row['id'] . '">' . $row['id'] . '</a></li>';
