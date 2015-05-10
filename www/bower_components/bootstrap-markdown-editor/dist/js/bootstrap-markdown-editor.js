@@ -1,7 +1,408 @@
-/*!
- * Bootstrap Markdown Editor v1.0.0 (https://github.com/inacho/bootstrap-markdown-editor)
- * Copyright 2015 Ignacio de Tomás <nacho@inacho.es>
- * Licensed under MIT (https://github.com/inacho/bootstrap-markdown-editor/blob/master/LICENSE)
- */
 
-!function(a){"use strict";function b(b,c,d,e,f){f.show();var g=new FormData,h=0;for(h=0;h<c.length;h++)g.append("file"+h,c[h]);a.ajax({url:b,type:"POST",contentType:!1,data:g,processData:!1,cache:!1,dataType:"json"}).done(function(a){var b="";a.length>1&&(b="\n");for(var c=0;c<a.length;c++)e.insertSnippet(d,"![]("+a[c]+")"+b)}).always(function(){f.hide()})}function c(b){var c,d=a(window).height(),e=b.offset().top;d>e&&(c=d-e,b.css("height",c+"px"))}function d(a,b){a.commands.addCommand({name:"bold",bindKey:{win:"Ctrl-B",mac:"Command-B"},exec:function(a){var c=a.session.getTextRange(a.getSelectionRange());""===c?b.insertSnippet(a,"**${1:text}**"):b.insertSnippet(a,"**"+c+"**")},readOnly:!1}),a.commands.addCommand({name:"italic",bindKey:{win:"Ctrl-I",mac:"Command-I"},exec:function(a){var c=a.session.getTextRange(a.getSelectionRange());""===c?b.insertSnippet(a,"*${1:text}*"):b.insertSnippet(a,"*"+c+"*")},readOnly:!1}),a.commands.addCommand({name:"link",bindKey:{win:"Ctrl-K",mac:"Command-K"},exec:function(a){var c=a.session.getTextRange(a.getSelectionRange());""===c?b.insertSnippet(a,"[${1:text}](http://$2)"):b.insertSnippet(a,"["+c+"](http://$1)")},readOnly:!1})}function e(a,b){0===a.getCursorPosition().column?(a.navigateLineStart(),a.insert(b+" ")):(a.navigateLineStart(),a.insert(b+" "),a.navigateLineEnd())}function f(b,c){var d="";return d+='<div class="md-loading"><span class="md-icon-container"><span class="md-icon"></span></span></div>',d+='<div class="md-toolbar">',d+='<div class="btn-toolbar">',d+='<div class="btn-group">',d+='<button type="button" data-mdtooltip="tooltip" title="'+c.label.btnHeader1+'" class="md-btn btn btn-sm btn-default" data-btn="h1">H1</button>',d+='<button type="button" data-mdtooltip="tooltip" title="'+c.label.btnHeader2+'" class="md-btn btn btn-sm btn-default" data-btn="h2">H2</button>',d+='<button type="button" data-mdtooltip="tooltip" title="'+c.label.btnHeader3+'" class="md-btn btn btn-sm btn-default" data-btn="h3">H3</button>',d+="</div>",d+='<div class="btn-group">',d+='<button type="button" data-mdtooltip="tooltip" title="'+c.label.btnBold+'" class="md-btn btn btn-sm btn-default" data-btn="bold"><span class="glyphicon glyphicon-bold"></span></button>',d+='<button type="button" data-mdtooltip="tooltip" title="'+c.label.btnItalic+'" class="md-btn btn btn-sm btn-default" data-btn="italic"><span class="glyphicon glyphicon-italic"></span></button>',d+="</div>",d+='<div class="btn-group">',d+='<button type="button" data-mdtooltip="tooltip" title="'+c.label.btnList+'" class="md-btn btn btn-sm btn-default" data-btn="ul"><span class="glyphicon glyphicon glyphicon-list"></span></button>',d+='<button type="button" data-mdtooltip="tooltip" title="'+c.label.btnOrderedList+'" class="md-btn btn btn-sm btn-default" data-btn="ol"><span class="glyphicon glyphicon-th-list"></span></button>',d+="</div>",d+='<div class="btn-group">',d+='<button type="button" data-mdtooltip="tooltip" title="'+c.label.btnLink+'" class="md-btn btn btn-sm btn-default" data-btn="link"><span class="glyphicon glyphicon-link"></span></button>',d+='<button type="button" data-mdtooltip="tooltip" title="'+c.label.btnImage+'" class="md-btn btn btn-sm btn-default" data-btn="image"><span class="glyphicon glyphicon-picture"></span></button>',c.imageUpload===!0&&(d+='<button type="button" data-mdtooltip="tooltip" title="'+c.label.btnUpload+'" class="btn btn-sm btn-default md-btn-file"><span class="glyphicon glyphicon-upload"></span><input class="md-input-upload" type="file" multiple accept=".jpg,.jpeg,.png,.gif"></button>'),d+="</div>",c.fullscreen===!0&&(d+='<div class="btn-group pull-right">',d+='<button type="button" class="md-btn btn btn-sm btn-default" data-btn="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span> '+c.label.btnFullscreen+"</button>",d+="</div>"),c.preview===!0&&(d+='<div class="btn-group pull-right">',d+='<button type="button" class="md-btn btn btn-sm btn-default btn-edit active" data-btn="edit"><span class="glyphicon glyphicon-pencil"></span> '+c.label.btnEdit+"</button>",d+='<button type="button" class="md-btn btn btn-sm btn-default btn-preview" data-btn="preview"><span class="glyphicon glyphicon-eye-open"></span> '+c.label.btnPreview+"</button>",d+="</div>"),d+="</div>",d+="</div>",d+='<div class="md-editor">'+a.trim(b)+"</div>",d+='<div class="md-preview" style="display:none"></div>'}var g={init:function(g){var h=a.extend(!0,{},a.fn.markdownEditor.defaults,g),i=this,j=!1,k=!1;i.addClass("md-container").html(f(this.text(),h)),"function"==typeof a().tooltip&&i.find('[data-mdtooltip="tooltip"]').tooltip({container:"body"});var l=i.find(".md-editor"),m=i.find(".md-preview"),n=i.find(".md-loading");i.css({width:h.width}),l.css({width:h.width,height:h.height,fontSize:h.fontSize}),m.css({width:h.width,height:h.height});var o,p=ace.edit(l[0]);return p.setTheme("ace/theme/"+h.theme),p.getSession().setMode("ace/mode/markdown"),p.getSession().setUseWrapMode(!0),p.setHighlightActiveLine(!1),p.setShowPrintMargin(!1),p.renderer.setShowGutter(!1),ace.config.loadModule("ace/ext/language_tools",function(){o=ace.require("ace/snippets").snippetManager,d(p,o)}),h.imageUpload&&(i.find(".md-input-upload").on("change",function(){var c=a(this).get(0).files;c.length&&b(h.uploadPath,a(this).get(0).files,p,o,n)}),i.on("dragenter",function(a){a.stopPropagation(),a.preventDefault()}),i.on("dragover",function(a){a.stopPropagation(),a.preventDefault()}),i.on("drop",function(a){a.preventDefault();var c=a.originalEvent.dataTransfer.files;b(h.uploadPath,c,p,o,n)})),h.fullscreen===!0&&a(window).resize(function(){k===!0&&c(j===!1?l:m)}),i.find(".md-btn").click(function(){var b=a(this).data("btn"),d=p.session.getTextRange(p.getSelectionRange());"h1"===b?e(p,"#"):"h2"===b?e(p,"##"):"h3"===b?e(p,"###"):"ul"===b?e(p,"*"):"ol"===b?e(p,"1."):"bold"===b?p.execCommand("bold"):"italic"===b?p.execCommand("italic"):"link"===b?p.execCommand("link"):"image"===b?""===d?o.insertSnippet(p,"![${1:text}](http://$2)"):o.insertSnippet(p,"!["+d+"](http://$1)"):"edit"===b?(j=!1,m.hide(),l.show(),i.find(".btn-edit").addClass("active"),i.find(".btn-preview").removeClass("active"),k===!0&&c(l)):"preview"===b?(j=!0,m.html('<p style="text-align:center; font-size:16px">'+h.label.loading+"...</p>"),h.onPreview(p.getSession().getValue(),function(a){m.html(a)}),l.hide(),m.show(),i.find(".btn-preview").addClass("active"),i.find(".btn-edit").removeClass("active"),k===!0&&c(m)):"fullscreen"===b&&(k===!0?(k=!1,a("body, html").removeClass("md-body-fullscreen"),i.removeClass("md-fullscreen"),l.css("height",h.height),m.css("height",h.height)):(k=!0,a("body, html").addClass("md-body-fullscreen"),i.addClass("md-fullscreen"),c(j===!1?l:m)),p.resize()),p.focus()}),this},content:function(){var a=ace.edit(this.find(".md-editor")[0]);return a.getSession().getValue()}};a.fn.markdownEditor=function(b){return g[b]?g[b].apply(this,Array.prototype.slice.call(arguments,1)):"object"!=typeof b&&b?void a.error("Method "+b+" does not exist on jQuery.markdownEditor"):g.init.apply(this,arguments)},a.fn.markdownEditor.defaults={width:"100%",height:"400px",fontSize:"14px",theme:"tomorrow",fullscreen:!0,imageUpload:!1,uploadPath:"",preview:!1,onPreview:function(a,b){b(a)},label:{btnHeader1:"Header 1",btnHeader2:"Header 2",btnHeader3:"Header 3",btnBold:"Bold",btnItalic:"Italic",btnList:"Unordered list",btnOrderedList:"Ordered list",btnLink:"Link",btnImage:"Insert image",btnUpload:"Upload image",btnEdit:"Edit",btnPreview:"Preview",btnFullscreen:"Fullscreen",loading:"Loading"}}}(jQuery);
+(function ($) {
+
+    "use strict";
+
+    var methods = {
+        init: function (options) {
+
+            var defaults = $.extend(true, {}, $.fn.markdownEditor.defaults, options),
+                plugin = this,
+                preview = false,
+                fullscreen = false;
+
+            // Replace the content of the div with our html
+            plugin.addClass('md-container').html(editorHtml(this.text(), defaults));
+
+            // If the Bootstrap tooltip library is loaded, initialize the tooltips of the toolbar
+            if (typeof $().tooltip === 'function') {
+                plugin.find('[data-mdtooltip="tooltip"]').tooltip({
+                    container: 'body'
+                });
+            }
+
+            var mdEditor = plugin.find('.md-editor'),
+                mdPreview = plugin.find('.md-preview'),
+                mdLoading = plugin.find('.md-loading');
+
+            plugin.css({
+                width: defaults.width
+            });
+
+            mdEditor.css({
+                width: defaults.width,
+                height: defaults.height,
+                fontSize: defaults.fontSize
+            });
+
+            mdPreview.css({
+                width: defaults.width,
+                height: defaults.height
+            });
+
+            // Initialize Ace
+            var editor = ace.edit(mdEditor[0]),
+                snippetManager;
+
+            editor.setTheme('ace/theme/' + defaults.theme);
+            editor.getSession().setMode('ace/mode/markdown');
+            editor.getSession().setUseWrapMode(true);
+
+            editor.setHighlightActiveLine(false);
+            editor.setShowPrintMargin(false);
+            editor.renderer.setShowGutter(false);
+
+            ace.config.loadModule('ace/ext/language_tools', function () {
+                snippetManager = ace.require('ace/snippets').snippetManager;
+                setShortcuts(editor, snippetManager);
+            });
+
+
+            // Image drag and drop and upload events
+            if (defaults.imageUpload) {
+
+                plugin.find('.md-input-upload').on('change', function() {
+                    var files = $(this).get(0).files;
+
+                    if (files.length) {
+                        uploadFiles(defaults.uploadPath, $(this).get(0).files, editor, snippetManager, mdLoading);
+                    }
+                });
+
+                plugin.on('dragenter', function (e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                });
+
+                plugin.on('dragover', function (e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                });
+
+                plugin.on('drop', function (e) {
+                    e.preventDefault();
+                    var files = e.originalEvent.dataTransfer.files;
+
+                    uploadFiles(defaults.uploadPath, files, editor, snippetManager, mdLoading);
+                });
+            }
+
+            // Window resize event
+            if (defaults.fullscreen === true) {
+                $(window).resize(function () {
+                    if (fullscreen === true) {
+                        if (preview === false) {
+                            adjustFullscreenLayout(mdEditor);
+                        } else {
+                            adjustFullscreenLayout(mdPreview);
+                        }
+                    }
+                });
+            }
+
+            // Toolbar events
+            plugin.find('.md-btn').click(function () {
+                var btnType = $(this).data('btn'),
+                    selectedText = editor.session.getTextRange(editor.getSelectionRange());
+
+                if (btnType === 'h1') {
+                    insertBeforeText(editor, '#');
+
+                } else if (btnType === 'h2') {
+                    insertBeforeText(editor, '##');
+
+                } else if (btnType === 'h3') {
+                    insertBeforeText(editor, '###');
+
+                } else if (btnType === 'ul') {
+                    insertBeforeText(editor, '*');
+
+                } else if (btnType === 'ol') {
+                    insertBeforeText(editor, '1.');
+
+                } else if (btnType === 'bold') {
+                    editor.execCommand('bold');
+
+                } else if (btnType === 'italic') {
+                    editor.execCommand('italic');
+
+                } else if (btnType === 'link') {
+                    editor.execCommand('link');
+
+                } else if (btnType === 'image') {
+                    if (selectedText === '') {
+                        snippetManager.insertSnippet(editor, '![${1:text}](http://$2)');
+                    } else {
+                        snippetManager.insertSnippet(editor, '![' + selectedText + '](http://$1)');
+                    }
+
+                } else if (btnType === 'edit') {
+                    preview = false;
+
+                    mdPreview.hide();
+                    mdEditor.show();
+                    plugin.find('.btn-edit').addClass('active');
+                    plugin.find('.btn-preview').removeClass('active');
+
+                    if (fullscreen === true) {
+                        adjustFullscreenLayout(mdEditor);
+                    }
+
+                } else if (btnType === 'preview') {
+                    preview = true;
+
+                    mdPreview.html('<p style="text-align:center; font-size:16px">' + defaults.label.loading + '...</p>');
+
+                    defaults.onPreview(editor.getSession().getValue(), function (content) {
+                        mdPreview.html(content);
+                    });
+
+                    mdEditor.hide();
+                    mdPreview.show();
+                    plugin.find('.btn-preview').addClass('active');
+                    plugin.find('.btn-edit').removeClass('active');
+
+                    if (fullscreen === true) {
+                        adjustFullscreenLayout(mdPreview);
+                    }
+
+                } else if (btnType === 'fullscreen') {
+
+                    if (fullscreen === true) {
+                        fullscreen = false;
+
+                        $('body, html').removeClass('md-body-fullscreen');
+                        plugin.removeClass('md-fullscreen');
+
+                        mdEditor.css('height', defaults.height);
+                        mdPreview.css('height', defaults.height);
+
+                    } else {
+                        fullscreen = true;
+
+                        $('body, html').addClass('md-body-fullscreen');
+                        plugin.addClass('md-fullscreen');
+
+                        if (preview === false) {
+                            adjustFullscreenLayout(mdEditor);
+                        } else {
+                            adjustFullscreenLayout(mdPreview);
+                        }
+                    }
+
+                    editor.resize();
+                }
+
+                editor.focus();
+            });
+
+            return this;
+        },
+        content: function () {
+            var editor = ace.edit(this.find('.md-editor')[0]);
+            return editor.getSession().getValue();
+        }
+    };
+
+    $.fn.markdownEditor = function (options) {
+
+        if (methods[options]) {
+            return methods[options].apply(this, Array.prototype.slice.call(arguments, 1));
+
+        } else if (typeof options === 'object' || ! options) {
+            return methods.init.apply(this, arguments);
+
+        } else {
+            $.error('Method ' +  options + ' does not exist on jQuery.markdownEditor');
+        }
+    };
+
+    function uploadFiles (url, files, editor, snippetManager, loading) {
+
+        loading.show();
+
+        var data = new FormData(),
+            i = 0;
+
+        for (i = 0; i < files.length; i++) {
+            data.append('file' + i, files[i]);
+        }
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: false,
+            data: data,
+            processData: false,
+            cache: false,
+            dataType: 'json'
+        }).done (function (uploadedFiles) {
+
+            var separation = '';
+            if (uploadedFiles.length > 1) {
+                separation = "\n";
+            }
+
+            for (var i = 0; i < uploadedFiles.length; i++) {
+                snippetManager.insertSnippet(editor, '![](' + uploadedFiles[i] + ')' + separation);
+            }
+
+        }).always(function () {
+            loading.hide();
+        });
+    }
+
+    function adjustFullscreenLayout (mdPanel) {
+        var hWindow = $(window).height(),
+            tEditor = mdPanel.offset().top,
+            hEditor;
+
+        if(hWindow > tEditor) {
+            hEditor = hWindow - tEditor;
+            mdPanel.css('height', hEditor + 'px');
+        }
+    }
+
+    function setShortcuts (editor, snippetManager) {
+        editor.commands.addCommand({
+            name: 'bold',
+            bindKey: {win: 'Ctrl-B',  mac: 'Command-B'},
+            exec: function (editor) {
+                var selectedText = editor.session.getTextRange(editor.getSelectionRange());
+
+                if (selectedText === '') {
+                    snippetManager.insertSnippet(editor, '**${1:text}**');
+                } else {
+                    snippetManager.insertSnippet(editor, '**' + selectedText + '**');
+                }
+            },
+            readOnly: false
+        });
+
+        editor.commands.addCommand({
+            name: 'italic',
+            bindKey: {win: 'Ctrl-I',  mac: 'Command-I'},
+            exec: function (editor) {
+                var selectedText = editor.session.getTextRange(editor.getSelectionRange());
+
+                if (selectedText === '') {
+                    snippetManager.insertSnippet(editor, '*${1:text}*');
+                } else {
+                    snippetManager.insertSnippet(editor, '*' + selectedText + '*');
+                }
+            },
+            readOnly: false
+        });
+
+        editor.commands.addCommand({
+            name: 'link',
+            bindKey: {win: 'Ctrl-K',  mac: 'Command-K'},
+            exec: function (editor) {
+                var selectedText = editor.session.getTextRange(editor.getSelectionRange());
+
+                if (selectedText === '') {
+                    snippetManager.insertSnippet(editor, '[${1:text}](http://$2)');
+                } else {
+                    snippetManager.insertSnippet(editor, '[' + selectedText + '](http://$1)');
+                }
+            },
+            readOnly: false
+        });
+    }
+
+    function insertBeforeText (editor, string) {
+
+        if (editor.getCursorPosition().column === 0) {
+            editor.navigateLineStart();
+            editor.insert(string + ' ');
+        } else {
+            editor.navigateLineStart();
+            editor.insert(string + ' ');
+            editor.navigateLineEnd();
+        }
+    }
+
+    function editorHtml (content, options) {
+        var html = '';
+
+        html += '<div class="md-loading"><span class="md-icon-container"><span class="md-icon"></span></span></div>';
+        html += '<div class="md-toolbar">';
+            html += '<div class="btn-toolbar">';
+
+                html += '<div class="btn-group">';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnHeader1 + '" class="md-btn btn btn-sm btn-default" data-btn="h1">H1</button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnHeader2 + '" class="md-btn btn btn-sm btn-default" data-btn="h2">H2</button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnHeader3 + '" class="md-btn btn btn-sm btn-default" data-btn="h3">H3</button>';
+                html += '</div>'; // .btn-group
+
+                html += '<div class="btn-group">';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnBold + '" class="md-btn btn btn-sm btn-default" data-btn="bold"><span class="glyphicon glyphicon-bold"></span></button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnItalic + '" class="md-btn btn btn-sm btn-default" data-btn="italic"><span class="glyphicon glyphicon-italic"></span></button>';
+                html += '</div>'; // .btn-group
+
+                html += '<div class="btn-group">';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnList + '" class="md-btn btn btn-sm btn-default" data-btn="ul"><span class="glyphicon glyphicon glyphicon-list"></span></button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnOrderedList + '" class="md-btn btn btn-sm btn-default" data-btn="ol"><span class="glyphicon glyphicon-th-list"></span></button>';
+                html += '</div>'; // .btn-group
+
+                html += '<div class="btn-group">';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnLink + '" class="md-btn btn btn-sm btn-default" data-btn="link"><span class="glyphicon glyphicon-link"></span></button>';
+                    html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnImage + '" class="md-btn btn btn-sm btn-default" data-btn="image"><span class="glyphicon glyphicon-picture"></span></button>';
+                    if (options.imageUpload === true) {
+                        html += '<button type="button" data-mdtooltip="tooltip" title="' + options.label.btnUpload + '" class="btn btn-sm btn-default md-btn-file"><span class="glyphicon glyphicon-upload"></span><input class="md-input-upload" type="file" multiple accept=".jpg,.jpeg,.png,.gif"></button>';
+                    }
+                html += '</div>'; // .btn-group
+
+                if (options.fullscreen === true) {
+                    html += '<div class="btn-group pull-right">';
+                        html += '<button type="button" class="md-btn btn btn-sm btn-default" data-btn="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span> ' + options.label.btnFullscreen + '</button>';
+                    html += '</div>'; // .btn-group
+                }
+
+                if (options.preview === true) {
+                    html += '<div class="btn-group pull-right">';
+                        html += '<button type="button" class="md-btn btn btn-sm btn-default btn-edit active" data-btn="edit"><span class="glyphicon glyphicon-pencil"></span> ' + options.label.btnEdit + '</button>';
+                        html += '<button type="button" class="md-btn btn btn-sm btn-default btn-preview" data-btn="preview"><span class="glyphicon glyphicon-eye-open"></span> ' + options.label.btnPreview + '</button>';
+                    html += '</div>'; // .btn-group
+                }
+
+            html += '</div>'; // .btn-toolbar
+        html += '</div>'; // .md-toolbar
+
+        html += '<div class="md-editor">' + $('<div>').text($.trim(content)).html() + '</div>';
+        html += '<div class="md-preview" style="display:none"></div>';
+
+        return html;
+    }
+
+    $.fn.markdownEditor.defaults = {
+        width: '100%',
+        height: '400px',
+        fontSize: '14px',
+        theme: 'tomorrow',
+        fullscreen: true,
+        imageUpload: false,
+        uploadPath: '',
+        preview: false,
+        onPreview: function (content, callback) {
+            callback(content);
+        },
+        label: {
+            btnHeader1: 'Header 1',
+            btnHeader2: 'Header 2',
+            btnHeader3: 'Header 3',
+            btnBold: 'Bold',
+            btnItalic: 'Italic',
+            btnList: 'Unordered list',
+            btnOrderedList: 'Ordered list',
+            btnLink: 'Link',
+            btnImage: 'Insert image',
+            btnUpload: 'Uplaod image',
+            btnEdit: 'Edit',
+            btnPreview: 'Preview',
+            btnFullscreen: 'Fullscreen',
+            loading: 'Loading'
+        }
+    };
+
+}(jQuery));
