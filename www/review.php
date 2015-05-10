@@ -101,7 +101,7 @@ else {
         else {
             echo "<h1>Unverified list</h1>"
             echo '<ul>';
-            while($row=$r->fetch()){
+            while($row=$unverified_query->fetch()){
                 echo '<li><a href="/review.php?id=' . $row['id'] . '">' . $row['id'] . '</a></li>';
             }
             echo '</ul>';
