@@ -48,7 +48,17 @@
             </thead>
             <tbody>
             <?php
-            $r=$con->query("select e.email, e.total_score, e.cnt, sec_to_time(e.total_time) as time_penalty, l.username, l.anonymous from (select email, sum(score) as total_score, count(*) as cnt, sum(timediff(submit_time, '2015-05-10 00:00:00')) as total_time from Loophole where verified=1 group by email) e left join Loophole l on e.email=l.email and l.verified=1 left join Loophole l1 on l.email=l1.email and l1.verified=1 and l.id<l1.id where l1.id is null order by total_score desc, cnt desc, total_time desc");
+            $r=$con->query("
+select e.email, e.total_score, e.cnt, sec_to_time(e.total_time) as time_penalty, l.username, l.anonymous from (
+  select email, sum(score) as total_score, count(*) as cnt, sum(timediff(submit_time, '2015-05-10 00:00:00')) as total_time
+  from (select l.email, l.domain, l.username, l.submit_time, l.score from Loophole l left join Loophole l1
+    on l.email=l1.email and l.domain=l1.domain and l.verified=1 and l1.verified=1
+      and (l.score<l1.score or l.score=l1.score and l.id>l1.id)
+    where l1.id is null) distinct_email_domain
+  group by email) e
+left join Loophole l on e.email=l.email and l.verified=1
+left join Loophole l1 on l.email=l1.email and l1.verified=1 and l.id<l1.id where l1.id is null
+order by total_score desc, cnt desc, total_time desc");
             if($r->rowcount()==0){
                 echo '<tr><td colspan="4">暂无数据</td></tr>';
             }
