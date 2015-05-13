@@ -515,7 +515,7 @@ $('#domain').typeahead({
         items: 10
 });
 for (device in deviceScores) {
-    $('#device').append('<option value="' + device + '"' +
+    $('#device').append('<option value="' + device + '"'
         + (device == "<?=$row['domain']?>" ? ' selected ' : '')
         + '>'
         + device
